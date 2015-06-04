@@ -1,0 +1,16 @@
+echo "(eclipse.use) $*"
+#
+# This is written to be sourced in a bash environement
+#
+
+case "$1" in
+	*)
+		tmp_eclipse_home=/c/Tools/Eclipse ;;
+esac
+
+if [ ! -e $tmp_eclipse_home ]; then
+	echo "$tmp_eclipse_home: does not exist!";
+fi
+
+alias eclipse=${tmp_eclipse_home}/startEclipse.cmd
+

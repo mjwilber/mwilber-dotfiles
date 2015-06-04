@@ -1,0 +1,53 @@
+echo "(weblogic.use) $*"
+
+
+#
+# This is written to be sourced in a bash environement
+#
+
+old_weblogic_home=$WEBLOGIC_HOME
+
+case "$1" in
+
+  8 | 8.1 | *)
+		tmp_weblogic_home=/c/bea/weblogic81
+
+esac
+
+if [ ! -e $tmp_weblogic_home ]; then
+	echo "$tmp_weblogic_home: does not exist!";
+fi
+
+# Check to see if our environment has to change
+if [ "$old_weblogic_home" != "$tmp_weblogic_home" ]; then
+
+	# Check if there is an old environment to clean up
+	if [ -n "$old_weblogic_home" ]; then
+
+		# Remove the old $WEBLOGIC_HOME in path etc...
+		# Create a Regular expression to match the current $WEBLOGIC_HOME
+		tmp=$(echo "$old_weblogic_home/bin:" | sed -e "s/\//\\\\\//g");
+
+		# Take PATH and remove the current $WEBLOGIC_HOME
+		export PATH=$(echo $PATH | sed -e "s/$tmp//g");
+	fi
+
+	# Set the WEBLOGIC_HOME to the one set
+	export WEBLOGIC_HOME=$tmp_weblogic_home;
+
+	# Check to see if it's already in the path
+	echo $PATH | grep -q $WEBLOGIC_HOME/bin
+	if [ $? -ne 0 ]; then
+		export PATH=$WEBLOGIC_HOME/bin:$PATH;
+	else
+		echo "Weblogic $WEBLOGIC_HOME already in PATH"
+	fi
+fi
+
+# set WL_HOME=%_DIR%
+# set PATH=%WL_HOME%\server\bin;%PATH%
+# set CLASSPATH=%JAVA_HOME%\lib\tools.jar;%CLASSPATH%
+# set CLASSPATH=%CLASSPATH%;%WL_HOME%\server\lib\weblogic_sp.jar
+# set CLASSPATH=%CLASSPATH%;%WL_HOME%\server\lib\weblogic.jar
+# set CLASSPATH=%CLASSPATH%;%WL_HOME%\server\lib\webservices.jar
+

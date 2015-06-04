@@ -1,0 +1,52 @@
+echo -n "(jdk.use) $* => "
+
+DEFAULT_JDK=8
+
+for possibleVer in $@ $DEFAULT_JDK; do
+    #debug echo "Checking: $possibleVer"
+    case "$possibleVer" in
+      # jrockit)
+      #    tmp_java_home=$(ls -d /c/bea/jrockit*) ;;
+
+      prophet_proj)
+        if [ -d ${PRJ_HOME}/tools/jdk1.6 ]; then
+          tmp_java_home=${PRJ_HOME}/tools/jdk1.6
+        fi
+        ;;
+
+      1.7.0_25)
+        tmp_java_home=/usr/lib/jvm/jdk1.7.0_25 ;;
+
+      1.7.0_55 | 1.7 | 7)
+        tmp_java_home=/usr/lib/jvm/jdk1.7.0_55 ;;
+
+      1.8.0_45 | 1.8 | 8)
+        tmp_java_home=/usr/lib/jvm/jdk1.8.0_45 ;;
+    esac
+    #debug echo "tmp var = $tmp_java_home" 
+    if [ -e $tmp_java_home ] && [ -n "$tmp_java_home" ]; then
+        #debug echo "tmp_java_home exists!"
+        break;
+    fi
+done
+
+RED="\e[1;31m"
+ColorOff="\e[0m"                    # Text Reset
+
+if [ ! -e $tmp_java_home ]; then
+    echo -e "${RED}ERROR: $tmp_java_home: does not exist!${ColorOff}" 1>&2 ; 
+    return;
+fi
+
+if [ -n "$JAVA_HOME" ]; then
+    # DEBUG echo "Removing old JDK environment"
+    # Remove last JDK environment if there was one
+    path_remove $JAVA_HOME/bin
+fi
+
+# Update to new environement
+export JAVA_HOME=$tmp_java_home;
+unset tmp_java_home
+
+pathmunge $JAVA_HOME/bin before
+echo "JAVA_HOME=$JAVA_HOME"

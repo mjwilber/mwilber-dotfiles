@@ -1,0 +1,44 @@
+echo "(cvs.use) $* Not Implemented"
+
+#
+# This is written to be sourced in a bash environement
+#
+
+old_cvs_home=$CVS_HOME
+
+case "$1" in
+
+	1 | *)
+		tmp_cvs_home=
+
+esac
+
+if [ ! -e $tmp_cvs_home ]; then
+	echo "$tmp_cvs_home: does not exist!";
+fi
+
+# Check to see if our environment has to change
+if [ "$old_cvs_home" != "$tmp_cvs_home" ]; then
+
+	# Check if the old path part should be removed
+	if [ -n "$old_cvs_home" ]; then
+
+		# Remove the old $CVS_HOME in path etc...
+		# Create a Regular expression to match the current $CVS_HOME
+		tmp=$(echo "$old_cvs_home/bin:" | sed -e "s/\//\\\\\//g");
+
+		# Take PATH and remove the current $CVS_HOME
+		export PATH=$(echo $PATH | sed -e "s/$tmp//g");
+	fi
+
+	# Set the CVS_HOME to the one set
+	export CVS_HOME=$tmp_cvs_home;
+
+	# Check to see if it's already in the path
+	echo $PATH | grep -q $CVS_HOME/bin
+	if [ $? -ne 0 ]; then
+		export PATH=$CVS_HOME/bin:$PATH;
+	else
+		echo "JDK $CVS_HOME already in PATH"
+	fi
+fi

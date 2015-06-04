@@ -1,0 +1,24 @@
+#!/bin/bash
+
+if [ -z $PRJ_HOME ] || [ ! -d $PRJ_HOME ]; then
+  echo "No or invalid project environment is set: PRJ_HOME";
+  exit 1;
+fi
+
+#local newPropertiesFile
+if [ $# -gt 0 ]; then
+  newPropertiesFile=$(mktemp)
+  # echo $newPropertiesFile
+  # cat ~/bin/fixed.teamcity.properties | awk -v pat="$PBRANCH" -v newVer=$1 '$1 ~ pat { print $1, newVer } $1 !~ pat {print }' > $newPropertiesFile
+  if ! grep "$PBRANCH" ~/bin/fixed.teamcity.properties >/dev/null; then
+    echo "Didn't find $PBRANCH line";
+    echo "$PBRANCH $1" > $newPropertiesFile
+  fi
+
+  cat ~/bin/fixed.teamcity.properties | awk -v pat="$PBRANCH" -v newVer=$1 '$1 ~ pat { print $1, newVer } $1 !~ pat {print }' >> $newPropertiesFile
+  mv $newPropertiesFile ~/bin/fixed.teamcity.properties
+fi
+
+echo "Fixed:"
+echo "http://svn.bybaxter.com/cgi-bin/viewvc.cgi/prophet?view=rev&revision=$(svn info $PRJ_HOME@HEAD | awk '/^Revision/ { print $2}' )"
+echo "TeamCity Prophet Trunk Nightly build #$(grep $PBRANCH ~/bin/fixed.teamcity.properties | awk '{print $2}')"

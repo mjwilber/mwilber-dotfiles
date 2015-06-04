@@ -1,0 +1,36 @@
+echo "(gradle.use) $*"
+
+case "$1" in
+
+  prophet_proj )
+  		proj_gradle_dir=$( find $PRJ_HOME/tools -maxdepth 1 -name "gradle*" -type d -exec basename {} \; | sort -r );
+		tmp_gradle_home=${PRJ_HOME}/tools/$proj_gradle_dir;
+		;;
+
+  1.12 | * )
+		tmp_gradle_home=/opt/gradle/1.12;
+		;;
+esac
+
+RED="\e[1;31m"
+ColorOff="\e[0m"                    # Text Reset
+
+if [ ! -e $tmp_gradle_home ]; then
+	echo -e "${RED}ERROR: $tmp_gradle_home: does not exist!${ColorOff}" 1>&2 ; 
+	return;
+fi
+
+if [ -n "$GRADLE_HOME" ]; then
+	# DEBUG # Remove last gradle environment if there was one
+	echo "Removing $GRADLE_HOME/bin"
+	path_remove $GRADLE_HOME/bin
+fi
+
+# Update to new environment
+export GRADLE_HOME=$tmp_gradle_home;
+
+pathmunge $GRADLE_HOME/bin before
+
+echo "type gradle" `type gradle`
+gradle -version
+# find $PRJ_HOME/tools -maxdepth 1 -name "gradle*" -type d -exec basename {} \; | sort -r

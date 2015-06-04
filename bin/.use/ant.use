@@ -1,0 +1,34 @@
+echo "(ant.use) $*"
+
+case "$1" in
+#  spr_vob)
+#		tmp_ant_home=${PRJ_HOME}/tools/lib/ant ;;
+
+  prophet_proj | *)
+  		proj_ant_dir=$( find $PRJ_HOME/tools -maxdepth 1 -name "*ant*" -type d -exec basename {} \; | sort -r );
+		tmp_ant_home=${PRJ_HOME}/tools/$proj_ant_dir;
+		;;
+esac
+
+RED="\e[1;31m"
+ColorOff="\e[0m"                    # Text Reset
+
+if [ ! -e $tmp_ant_home ]; then
+	echo -e "${RED}ERROR: $tmp_ant_home: does not exist!${ColorOff}" 1>&2 ; 
+	return;
+fi
+
+if [ -n "$ANT_HOME" ]; then
+	# DEBUG # Remove last ant environment if there was one
+	echo "Removing $ANT_HOME/bin"
+	path_remove $ANT_HOME/bin
+fi
+
+# Update to new environment
+export ANT_HOME=$tmp_ant_home;
+
+pathmunge $ANT_HOME/bin before
+
+echo "type ant" `type ant`
+ant -version
+# find $PRJ_HOME/tools -maxdepth 1 -name "ant*" -type d -exec basename {} \; | sort -r

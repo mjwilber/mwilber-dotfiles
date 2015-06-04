@@ -1,0 +1,69 @@
+Rem Add the path
+PATH=%_DIR%\bin;%PATH%
+
+:else1
+rem setup environment
+set catalina_home=%DIR%
+set TOMCAT_HOME=%catalina_home%
+set servletapi_home=%catalina_home%/common/lib
+
+goto exit
+
+:usage
+echo Usage: USE Sample
+goto exit
+
+:exit
+set _DIR=
+
+
+
+
+echo "(tomcat.use) $*"
+#
+# This is written to be sourced in a bash environement
+#
+
+old_tomcat_home=$TOMCAT_HOME
+
+case "$1" in
+
+  4 | 4.1 | 4.1.27 | *)
+		tmp_tomcat_home=/d/Tools/Tomcat/4.1.27/
+
+esac
+
+if [ ! -e $tmp_tomcat_home ]; then
+	echo "$tmp_tomcat_home: does not exist!";
+fi
+
+# Check to see if our environment has to change
+if [ "$old_tomcat_home" != "$tmp_tomcat_home" ]; then
+
+	# Check if anything old needs to be removed
+	if [ -n "$old_tomcat_home" ]; then
+
+		# Remove the old $TOMCAT_HOME in path etc...
+		# Create a Regular expression to match the current $TOMCAT_HOME
+		tmp=$(echo "$old_tomcat_home/bin:" | sed -e "s/\//\\\\\//g");
+
+		# Take PATH and remove the current $TOMCAT_HOME
+		export PATH=$(echo $PATH | sed -e "s/$tmp//g");
+
+		# CLASSPATH????
+	fi
+
+	# CHANGE THE ENVIRONMENT
+
+
+	# Set the TOMCAT_HOME to the one set
+	export TOMCAT_HOME=$tmp_tomcat_home;
+
+	# Check to see if it's already in the path
+	echo $PATH | grep -q $TOMCAT_HOME/bin
+	if [ $? -ne 0 ]; then
+		export PATH=$TOMCAT_HOME/bin:$PATH;
+	else
+		echo "Tomcat $TOMCAT_HOME already in PATH"
+	fi
+fi

@@ -1,0 +1,206 @@
+echo "(paychex.be) $*"
+
+########################################################
+# Setup project environment.
+# Usage: project <projectName>
+# Variables set: PRJ, PRJ_HOME, ANT_HOME, SPR_BUILD_PROPERTIES,
+# and the old ANT_HOME/bin is replace by the new ANT_HOME/bin
+# in PATH
+#
+
+export PRJ=Paychex
+export VIEWS_HOME=/d/Views
+proj_name=$1
+if [ -z "$1" ]; then
+	echo "Usage: be <projectName>";
+	echo "";
+	return;
+fi
+
+# Setup the new project
+export PRJ=$proj_name;
+export PRJ_HOME=$VIEWS_HOME/$PRJ/payx;
+export SPR_BUILD_PROPERTIES=$(cygpath --windows ${PRJ_HOME}/user.properties);
+properties=$PRJ_HOME/user.properties
+
+if [ -e $properties ]; then
+
+	. $properties 2> /dev/null
+
+	echo --------------------------
+	cat $properties;
+	echo --------------------------
+	echo --------------------------
+	echo 
+fi
+
+# Used for sql command
+export payroll_db_name=${payroll_db_name:=payroll};
+export payroll_db_username=${payroll_db_username:=spr};
+export payroll_db_password=${payroll_db_password:=password};
+
+use ant spr_vob
+use eclipse
+
+cd $PRJ_HOME;
+pwd
+
+unset proj_name
+unset properties
+
+########################################################
+# Goto a directory in the project.
+# Usage: dev <dirname>
+# dirname is translated to $PRJ_HOME/<dirname>/dev
+#
+function dev ()
+{
+	if [ -z "$PRJ" ]; then
+		echo "usage: dev <dir name>";
+		echo "ERROR - Requires a project environment";
+		return;
+	fi
+
+	if [ -d $PRJ_HOME/$1/dev ]; then
+		pushd $PRJ_HOME/$1/dev;
+	else
+		echo "Directory does not exist: $PRJ_HOME/$1/dev";
+	fi
+}
+
+
+function pant ()
+{
+	pushd $PRJ_HOME/$1/dev > /dev/null;
+	shift;
+	ant $*;
+	popd > /dev/null;
+}
+
+
+function pover()
+{
+	local targets;
+	local prjDirs;
+
+	for arg in $*; do
+		if [ -d $PRJ_HOME/$arg/dev ]; then
+			prjDirs="$prjDirs $arg";
+		else
+			targets="$targets $arg"
+		fi
+	done
+	
+	echo ""
+	echo "Targets: ${targets}"
+	echo "Dirs: ${prjDirs}"
+	echo ""
+
+	for prjDir in $prjDirs; do
+		pant $prjDir $targets;
+	done
+}
+
+function viewOnly()
+{
+	cleartool ls -recurse -view_only | egrep -v "\\\\(build|bin)"
+}
+
+function viewPrivate()
+{
+	find . -perm 700 -a -type f | egrep -v "/(build|bin)"
+}
+
+function start()
+{
+	echo ""
+	echo    "#############################################################";
+	echo -n "#      Starting Weblogic";
+
+	local start_command="";
+	until [ -z "$1" ]  # Until all parameters used up...
+	do
+		if [ "$1" == "debug" ]; then
+			echo -n " DEBUG";
+			start_command="${start_command} -Dappserver.debug=true -Ddebug.mode=true";
+		else
+			start_command="${start_command} $1";
+		fi
+		shift
+	done
+
+	echo ""
+	echo "#############################################################";
+	echo pant domain appserver.start ${start_command:-""}
+	pant domain appserver.start ${start_command:-""}
+}
+	
+function stop()
+{
+	pant domain appserver.stop
+}
+
+function refreshProject()
+{
+	ant clean
+	pant util jar
+	pant utilui jar
+	pant domain db.setup jar
+	pant product jar
+	pant desktop jar
+}
+
+
+function ct()
+{
+	if [ "$1" == "update" ] || [ "$1" == "setcs" ]; then
+		cleartool $* 2>&1 | gawk -f ~/bin/ccupdate.awk ;
+
+		# ccudpate.awk should have created a .ccudpatefile
+		if [ -r ".ccupdatefile" ]; then
+			echo "Opening: " $(cat .ccupdatefile);
+			cygstart -o $(cat .ccupdatefile);
+		else
+			echo "No log file detected";
+		fi
+	else
+		cleartool $*
+	fi
+}
+
+# ctfind spr1143
+function ctfind ()
+{
+	echo ct find . -version "version(.../$1/LATEST)" -print;
+	ct find . -version "version(.../$1/LATEST)" -print;
+}
+
+# ctfindme
+function ctfindme ()
+{
+	echo ct find . -branch "brtype($1)" -version "created_by(jbennett)" -print;
+    ct find . -branch "brtype($1)" -version "created_by(jbennett)" -print;
+}
+
+# ctfindco spr9999
+function ctfindco()
+{
+	echo ct lsco -all -brtype $1 -s;
+	ct lsco -all -brtype $1 -s;
+}
+		
+# Fix odd JDK thing...
+newJPath=$(echo $(cygpath $JAVA_HOME/bin) | sed 's/\//\\\//g')
+export PATH=$(echo $PATH | sed -e "s/%JAVA_HOME%\/bin/$newJPath/g")
+#export PATH=$(echo $PATH | sed -e "s/%JAVA_HOME%\/bin/%JAVA_HOME%\/bin:$newJPath/g")
+
+
+alias vtree=clearvtree
+alias sql='echo dbisql -nogui -d1 -c "ENG=${payroll_db_name};uid=${payroll_db_username};pwd=${payroll_db_password}" $*; dbisql -nogui -c "ENG=${payroll_db_name};uid=${payroll_db_username};pwd=${payroll_db_password}"'
+alias isql='echo dbisql -d1 -c "ENG=${payroll_db_name};uid=${payroll_db_username};pwd=${payroll_db_password}" $*; dbisql -c "ENG=${payroll_db_name};uid=${payroll_db_username};pwd=${payroll_db_password}" &'
+
+alias dbviz="/c/bea/weblogic81/common/eval/dbvisualizer/run.bat &"
+alias explore="explorer \"/E,/ROOT,\$(cygpath --windows ${PRJ_HOME})\" &"
+alias cdpayx="pushd ${PRJ_HOME}"
+
+

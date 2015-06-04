@@ -1,0 +1,29 @@
+#!/bin/bash
+
+function usage() {
+    [ $# -gt 0 ] && echo "ERROR: $*"
+    echo "Usage $0"
+    echo "    $0 hostname"
+    echo ""
+    [ $# -gt 0 ] && exit 2;
+}
+
+if [ $# -lt 1 ]; then
+    usage "A hostname is required"
+fi
+
+dbhost=$1
+dbhostuser=root
+todir=$dbhost/`date +%Y-%m-%d`
+
+# Prevent overwriting
+if [ -d "$todir" ]; then
+    usage "Output directory already exists: $todir"
+fi
+
+mkdir -p $todir
+pushd $todir
+pwd
+
+scp $dbhostuser@$dbhost:/var/opt/plan/unl/web/scripts/unloads/* .
+popd

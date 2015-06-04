@@ -1,0 +1,37 @@
+echo "(log4j.use) $*"
+
+#
+# This is written to be sourced in a bash environement
+#
+
+case "$1" in
+
+  1.2.4 | 124 | *)
+		tmp_log4j_jar=/d/Tools/Log4J/1.2.4/dist/lib/log4j-1.2.4.jar
+
+esac
+
+if [ ! -e $tmp_log4j_jar ]; then
+	echo "$tmp_log4j_jar: does not exist!";
+	return;
+fi
+
+# Check to see if it's already in the classpath
+echo $CLASSPATH | grep -q "$tmp_log4j_jar"
+if [ $? -ne 0 ]; then
+
+	# Check for another version of Log4J in the classpath
+	echo $CLASSPATH | grep -q -i "log4j"
+	if [ $? -eq 0 ]; then
+		echo "WARNING: Multiple versions of Log4J in the CLASSPATH."
+	fi
+
+	if [ -n "$CLASSPATH" ]; then
+		export CLASSPATH=$tmp_log4j_jar:$CLASSPATH;
+	else
+		export CLASSPATH=$tmp_log4j_jar
+	fi
+	
+fi
+
+unset tmp_log4j_jar

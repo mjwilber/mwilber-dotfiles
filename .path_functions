@@ -1,0 +1,18 @@
+[ -z "$PS1" ] || echo "(~/.path_functions)"
+
+function pathmunge () {
+	case ":${PATH}:" in
+		*:"$1":*)
+			;;
+		*)
+			if [ "$2" = "after" ] ; then
+				PATH=$PATH:$1
+			else
+				PATH=$1:$PATH
+			fi
+	esac
+}
+
+path_append ()  { path_remove $1; export PATH="$PATH:$1"; }
+path_prepend () { path_remove $1; export PATH="$1:$PATH"; }
+path_remove ()  { export PATH=`echo -n $PATH | awk -v RS=: -v ORS=: '/$1/ {next} {print}' | sed 's/:$//'`; }

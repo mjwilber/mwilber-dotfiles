@@ -1,0 +1,44 @@
+echo "(groovy.use) $*"
+#
+# This is written to be sourced in a bash environement
+#
+
+old_groovy_home=$GROOVY_HOME
+
+case "$1" in
+  1.5b3)
+		tmp_groovy_home=/d/Tools/Groovy/groovy-1.0-beta-4 ;;
+
+  *)
+		tmp_groovy_home=/d/Tools/Groovy/groovy-1.0-beta-4 ;;
+esac
+
+if [ ! -e $tmp_groovy_home ]; then
+	echo "$tmp_groovy_home: does not exist!";
+fi
+
+# Check to see if our environment has to change
+if [ "$old_groovy_home" != "$tmp_groovy_home" ]; then
+
+	# Check if the old path part should be removed
+	if [ -n "$old_groovy_home" ]; then
+
+		# Remove the old $GROOVY_HOME in path etc...
+		# Create a Regular expression to match the current $GROOVY_HOME
+		tmp=$(echo "$old_groovy_home/bin:" | sed -e "s/\//\\\\\//g");
+
+		# Take PATH and remove the current $GROOVY_HOME
+		export PATH=$(echo $PATH | sed -e "s/$tmp//g");
+	fi
+
+	# Set the GROOVY_HOME to the one set
+	export GROOVY_HOME=$tmp_groovy_home;
+
+	# Check to see if it's already in the path
+	echo $PATH | grep -q $GROOVY_HOME/bin
+	if [ $? -ne 0 ]; then
+		export PATH=$GROOVY_HOME/bin:$PATH;
+	else
+		echo "Groovy $GROOVY_HOME already in PATH"
+	fi
+fi

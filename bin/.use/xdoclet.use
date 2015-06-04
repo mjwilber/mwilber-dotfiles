@@ -1,0 +1,37 @@
+echo "(xdoclet.use) $*"
+
+#
+# This is written to be sourced in a bash environement
+#
+
+case "$1" in
+
+  1.2 | *)
+		tmp_xdoclet_jar=/d/Tools/XDoclet/1.2.020726
+
+esac
+
+if [ ! -e $tmp_xdoclet_jar ]; then
+	echo "$tmp_xdoclet_jar: does not exist!";
+	return;
+fi
+
+# Check to see if it's already in the classpath
+echo $CLASSPATH | grep -q "$tmp_xdoclet_jar"
+if [ $? -ne 0 ]; then
+
+	# Check for another version of Junit in the classpath
+	echo $CLASSPATH | grep -q -i "xdoclet"
+	if [ $? -eq 0 ]; then
+		echo "WARNING: Multiple versions of XDoclet in the CLASSPATH."
+	fi
+
+	if [ -n "$CLASSPATH" ]; then
+		export CLASSPATH=$tmp_xdoclet_jar:$CLASSPATH;
+	else
+		export CLASSPATH=$tmp_xdoclet_jar
+	fi
+	
+fi
+
+unset tmp_xdoclet_jar

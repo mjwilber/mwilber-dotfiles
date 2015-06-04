@@ -1,0 +1,38 @@
+echo "(junit.use) $*"
+#
+# This is written to be sourced in a bash environement
+#
+
+case "$1" in
+  3.8)
+		tmp_junit_jar=/d/Tools/JUnit/3.8/junit.jar ;;
+
+  3.7 | *)
+		tmp_junit_jar=/d/Tools/JUnit/3.7/junit.jar ;;
+
+esac
+
+if [ ! -e $tmp_junit_jar ]; then
+	echo "$tmp_junit_jar: does not exist!";
+	return;
+fi
+
+# Check to see if it's already in the classpath
+echo $CLASSPATH | grep -q "$tmp_junit_jar"
+if [ $? -ne 0 ]; then
+
+	# Check for another version of Junit in the classpath
+	echo $CLASSPATH | grep -q -i "junit"
+	if [ $? -eq 0 ]; then
+		echo "WARNING: Multiple versions of JUnit in the CLASSPATH."
+	fi
+
+	if [ -n "$CLASSPATH" ]; then
+		export CLASSPATH=$tmp_junit_jar:$CLASSPATH;
+	else
+		export CLASSPATH=$tmp_junit_jar
+	fi
+	
+fi
+
+unset tmp_junit_jar

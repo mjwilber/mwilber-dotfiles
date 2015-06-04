@@ -1,0 +1,20 @@
+This is my 'favorite conky' that I am using right now. I use Ubuntu and this conky uses Ubuntu fonts.
+
+I have modified and borrowed from different sources on the net and this site.
+
+My conky is actually 8 files working together.
+
+The first file is the 'startupconky.sh' file that should go in the /bin folder in your /home folder.  You can 
+   click this file to run conky or better, add to your 'startup applications.'
+
+The other seven files are the main conky files and are located in the '.my_fave_conky' folder.  This folder should
+   go in your /home folder.
+
+Add the 'ip.sh' file to your /.scripts folder in your /home folder.
+
+The font I use for the clock (called 'computerfont') is here --> http://www.urbanfonts.com/fonts/Computerfont.htm
+   Put the font in your /.fonts folder in your /home folder.  Then update your fonts in terminal with 'fc-cache -v -f' and you are set!
+
+The colors are easy to change.  Just open each file and look for the color section and change the color, then save.
+
+Enjoy, and modify to your taste!

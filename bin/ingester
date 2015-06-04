@@ -1,0 +1,88 @@
+#!/bin/bash
+#
+# Renames specifiex file(s) by using exif data (via exiv2).
+# to $year/$month/$year-$month-$day/Wilber_$year$month$day_$imageNumber.$ext
+#
+# The only thing configurable at this point is the prefix using the -p option
+#
+# Requires exiv2 for meta data extraction and setting the file's timestamp
+#
+debug=0
+files_processed=0
+prefix_to_remove=IMG_
+prefix_to_add=Wilber
+while getopts dp: o
+do	case "$o" in
+	d)	debug=1;;
+	p)	prefix_to_add=$OPTARG;;
+	[?])	echo "Usage: $0 [-d] [-p prefix_to_prepend] file(s) ..." >&2 ;
+			exit 1;;
+	esac
+done
+shift $(($OPTIND-1))
+
+function debug {
+    if [ $debug -gt 0 ]; then
+		echo $*;
+	fi
+}
+
+function makeImageDirectoryName { # ( year, month, day )
+	[ $# -lt 2 ] && echo "Invalid number of args to makeImageDirectoryname: $*" && exit -1;
+	year=$1;
+	month=$2;
+	day=$3;
+	imageDir=$year/$month/$year-$month-$day;
+}
+
+function makeNewImageName { # ( imageName, rev, extension, year, month, day )
+	[ $# -lt 2 ] && echo "Invalid number of args to makaNewImageName : $*" && exit -1;
+	prefix=$prefix_to_add
+	nm=$1;
+	rev=$2;
+	extension=$3;
+	year=$4;
+	month=$5;
+	day=$6;
+	newFileName=${prefix}_${year}${month}${day}_${nm}${rev}.${extension};
+}
+
+imageRevs="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+echo "";
+for picFile in $*; do
+	if [ -d $picFile ]; then
+		continue;
+	fi
+	debug "##### $picFile";
+	fileExt=${picFile#*.};
+	imageName=${picFile%.*}
+	# Remove prefix_to_remove if one is defined
+	[ -n $prefix_to_remove ] && imageName=${imageName#*${prefix_to_remove}};
+	exifOrigDate=`exiv2 pr "$picFile" | grep timestamp`;
+	debug "pic date: $exifOrigDate"
+	year=${exifOrigDate:18:4}
+	month=${exifOrigDate:23:2}
+	dayOfMonth=${exifOrigDate:26:2}
+	makeImageDirectoryName $year $month $dayOfMonth;
+	debug "    ext=[$fileExt] imageName=[$imageName] ts=[$exifOrigDate] imageDir=[$imageDir]";
+	i=0;
+	makeNewImageName "$imageName"  "" "$fileExt" "$year" "$month" "$dayOfMonth";
+	debug "    newImageName=[$newFileName]";
+	while [ -e $imageDir/$newFileName ] && [ $i -lt ${#imageRevs} ]; do
+		imageRev=${imageRevs:i:1};
+		makeNewImageName "$imageName"  "$imageRev" "$fileExt" "$year" "$month" "$dayOfMonth";
+		((i+=1));
+	done
+	[ ! -d $imageDir ] && mkdir -p $imageDir && echo "Created $imageDir";
+	cp $picFile $imageDir/$newFileName;
+	exiv2 -T $imageDir/$newFileName;
+	printf "%25s ---> %s\n" $picFile $newFileName;
+	((files_processed+=1));
+	debug "---- Done with $picFile";
+done
+
+echo "";
+echo "Finished -- $files_processed files processed!";
+exit 0;
+

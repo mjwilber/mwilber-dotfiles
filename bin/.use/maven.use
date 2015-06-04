@@ -1,0 +1,33 @@
+echo "(maven.use) $*"
+
+#
+# This is written to be sourced in a bash environement
+#
+
+old_maven_home=$MAVEN_HOME
+
+case "$1" in
+
+  3 | 3.0 | 3.0.4 | *)
+		tmp_maven_home=/opt/maven/3.0.4
+
+esac
+
+RED="\e[1;31m"
+ColorOff="\e[0m"                    # Text Reset
+
+if [ ! -e $tmp_maven_home ]; then
+	echo -e "${RED}ERROR: $tmp_maven_home: does not exist!${ColorOff}" 1>&2 ; 
+	return;
+fi
+
+if [ -n "$MAVEN_HOME" ]; then
+	# DEBUG echo "Removing old MAVEN environment"
+	# Remove last MAVEN environment if there was one
+	path_remove $MAVEN_HOME/bin
+fi
+
+# Update to new environement
+export MAVEN_HOME=$tmp_maven_home;
+
+pathmunge $MAVEN_HOME/bin before

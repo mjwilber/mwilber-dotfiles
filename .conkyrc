@@ -1,0 +1,104 @@
+# Conky, a system monitor, based on torsmo
+#
+# Any original torsmo code is licensed under the BSD license
+#
+# All code written since the fork of torsmo is licensed under the GPL
+#
+# Please see COPYING for details
+#
+# Copyright (c) 2004, Hannu Saransaari and Lauri Hakkarainen
+# Copyright (c) 2005-2010 Brenden Matthews, Philip Kovacs, et. al. (see AUTHORS)
+# All rights reserved.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+alignment bottom_left
+background no
+border_width 1
+cpu_avg_samples 2
+default_color 5382BA # white
+default_outline_color orange #white
+default_shade_color 000000
+draw_borders no
+draw_graph_borders yes
+draw_outline no
+draw_shades no
+use_xft yes
+xftfont DejaVu Sans Mono:size=8
+xftalpha 0.5
+gap_x 10
+gap_y 35
+minimum_size 300 5
+maximum_width 300
+net_avg_samples 2
+no_buffers yes
+out_to_console no
+out_to_stderr no
+extra_newline no
+own_window yes
+own_window_class Conky
+own_window_type desktop
+stippled_borders 0
+update_interval 5.0
+uppercase no
+use_spacer none
+show_graph_scale no
+show_graph_range no
+
+color2 orange #title
+color1 FFFFFF #text
+color0 FFA500 #icon
+
+temperature_unit fahrenheit
+double_buffer yes
+
+lua_load ~/.conky/format.lua
+
+#template0 (Heading) 1:name 2:hr height
+template0 ${color}${color2}\1» ${hr \2}${color}
+
+#template1 (process) 1:top/top_mem/top_io 2:process rank for #1
+template1 ${\1 name \2} $alignr ${\1 pid \2} ${\1 cpu \2} ${\1 mem \2} ${lua_parse format %3.0f ${\1 io_perc \2}}%
+
+TEXT
+${template0 SYSTEM 2}
+${time}${alignr}$nodename
+${alignc}$sysname $kernel on $machine
+${alignc}${color grey}Uptime:$color $uptime
+${template0 SUMMARY 2}
+${color grey}Uptime:$color $uptime
+${color grey}Frequency:$color ${freq_g}GHz (${freq}MHz)${alignr}${hwmon temp 1}°F
+${color grey}CPU Usage:$color $cpu% ${cpubar 4}
+${color grey}${cpugraph 474747 E9E9E9}
+${color grey}RAM Usage:$color $mem/$memmax $memperc% ${membar 4}
+${color grey}Swap Usage:$color $swap/$swapmax $swapperc% ${swapbar 4}
+${template0 FILE\ SYSTEM 2}
+ / $color${fs_used /}/${fs_size /} ${fs_bar 6 /}
+${template0 NETWORK 2}
+${color grey}Up: ${color}${upspeed wlan0}/s ${alignr}${color grey}Down:$color ${downspeed wlan0}/s
+${color grey}Total: ${color}${totalup wlan0} ${alignr}${color grey}Total: ${color}${totaldown wlan0}
+${color grey}${downspeedgraph wlan0 25,140 474747 E9E9E9} ${alignr}${upspeedgraph wlan0 25,140 474747 E9E9E9}${color1}
+${color grey}Inbound: ${color}${tcp_portmon 1 32767 count} ${color grey}Outbound: ${color}${tcp_portmon 32768 61000 count}${alignr}${color grey}Total: ${color}${tcp_portmon 1 65535 count}
+${template0 PROCESSES 2}
+${alignc}${color grey}Processes:$color $processes  ${color grey}Running:$color $running_processes
+NAME $alignr PID   CPU    MEM   IO
+${template0 cpu 1}
+${template1 top 1}
+${template1 top 2}
+${template1 top 3}
+${template0 memory 1}
+${template1 top_mem 1}
+${template1 top_mem 2}
+${template0 io 1}
+${template1 top_io 1}

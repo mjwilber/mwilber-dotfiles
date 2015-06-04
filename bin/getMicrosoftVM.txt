@@ -1,0 +1,9 @@
+Instructions
+Download the SFX and all RAR files for the VM (smaller VMs may not have files with RAR extension). In each set below that contains a split archive, the provided text file (.txt) contains URLs to all files in the set, and this can be used directly with the 'wget' command in Linux. From the terminal, enter wget -i [URL TO TEXT FILE]. For Windows XP single file downloads, use wget [URL TO DOWNLOAD FILE] instead.
+
+Example 1: wget -i https://az412801.vo.msecnd.net/vhd/IEKitV1_Final/VirtualBox/Linux/IE8_Win7/IE8.Win7.For.LinuxVirtualBox_2.txt
+
+Example 2: wget https://az412801.vo.msecnd.net/vhd/IEKitV1_Final/VirtualBox/Linux/IE6_XP/IE6.WinXP.For.LinuxVirtualBox.sfx
+
+After the download of all files for a set is complete, give the SFX file execute permission by typing chmod +x filename.sfx at the terminal.
+Execute the SFX executable from the terminal with ./filename.sfx to expand the virtual machine to the current directory.
