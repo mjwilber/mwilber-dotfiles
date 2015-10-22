@@ -1,4 +1,4 @@
-echo "(~/bin/project-env.sh)"
+echo "(projects.bash)"
 
 BEFILES_HOME=~/bin/.be
 USEFILES_HOME=~/bin/.use
