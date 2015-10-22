@@ -1,29 +1,25 @@
 # .bashrc
 [ -z "$PS1" ] || echo "(~/.bashrc)"
 
+export DOTFILES=$HOME/.dotfiles
+export BASH_CONFIG=$DOTFILES/bash
 export EDITOR=vi
 
 if [ -n "$PS1" ]; then # Run the rest only for interactive shells
 	# Source global definitions
-	if [ -f /etc/bashrc ]; then
-		. /etc/bashrc
-	fi
-
+	[ -f /etc/bashrc ] && . /etc/bashrc
 
 	shopt -s cdspell	# Changing directories ignores spmall typos
 	shopt -s histappend	# Append to HISTFILE on shell exit rather than overwrite
 
-	# Set default prompt
+	# load all bash config files
+	[ -d $BASH_CONFIG ] && for bash_config in $BASH_CONFIG/*.bash; do  source $bash_config; done
 
-	# User specific aliases and functions
-	[ -e ~/.alias ] && . ~/.alias
-	[ -e ~/.path_functions ] && . ~/.path_functions
+    # Add .dotfiles/bin to path
+    [ -d $DOTFILES/bin ] && export PATH="$DOTFILES/bin:$PATH"
 
-	# [ -e ~/bin/bashmarks.bash ] && . ~/bin/bashmarks.bash 
-	[ -e ~/.marksrc ] && . ~/.marksrc
-
-	[ -e ~/bin/project-env.sh ] && . ~/bin/project-env.sh
+    # Allow for local shell modifications
+	[ -e ~/.localrc ] && source ~/.localrc
 
 	export PROMPT_COMMAND="history -a; history -n;${PROMPT_COMMAND}"
-
 fi

@@ -1,4 +1,4 @@
-[ -z "$PS1" ] || echo "(~/.path_functions)"
+[ -z "$PS1" ] || echo "(path_functions.bash)"
 
 function pathmunge () {
 	case ":${PATH}:" in

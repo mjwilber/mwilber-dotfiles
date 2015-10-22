@@ -1,5 +1,6 @@
 
-[ -z "$PS1" ] || echo "(~/.alias)"
+[ -z "$PS1" ] || echo "(alias.bash)"
+
 #SVN I use a wrapper for it to do some nice terminal and formatting items
 alias svn=svn-wrap.sh
 

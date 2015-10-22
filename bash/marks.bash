@@ -1,4 +1,4 @@
-echo "(~/.marksrc)"
+echo "(marksrc.bash)"
 
 # http://jeroenjanssens.com/2013/08/16/quickly-navigate-your-filesystem-from-the-command-line.html
 # Jumping with symbolic links
