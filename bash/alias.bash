@@ -54,3 +54,19 @@ alias ack=ack-grep
 #grep -rI –color –exclude-dir=\.bzr –exclude-dir=\.git –exclude-dir=\.hg –exclude-dir=\.svn –exclude-dir=build –exclude-dir=dist –exclude=tags $*
 
 box() { t="$1xxxx";c=${2:-#}; echo ${t//?/$c}; echo "$c $1 $c"; echo ${t//?/$c}; }
+alias json-decode="php -r 'print_r(json_decode(file_get_contents(\"php://stdin\")));'"
+
+function untab() {
+ 	tmpFile=`mktemp`;
+ 	# debug echo $tmpFile
+ 	for f in $*; do
+ 		echo -n "Expanding $f ... ";
+ 		if grep -qP "\t" ${f}
+ 		then
+ 			expand --tabs=4 ${f} > ${tmpFile}; mv ${tmpFile} ${f}
+ 			echo "Complete!"
+ 		else
+ 			echo "No tab characters found"
+ 		fi
+ 	done
+}
