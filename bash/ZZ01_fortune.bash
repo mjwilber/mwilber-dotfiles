@@ -1,1 +1,1 @@
-[ $TERM != "dumb" ] && [ -e /usr/bin/fortune ]  && echo "" && /usr/bin/fortune && echo ""
+[ $TERM != "dumb" ] && [ -e /usr/games/fortune ]  && echo "" && /usr/games/fortune && echo ""

@@ -1,0 +1,64 @@
+#!/bin/bash
+
+###############################################################################
+# Usage
+###############################################################################
+usage()
+{
+    echo
+	echo "Destroy and recreate a database and restore from a local file"
+	echo
+	echo "Usage: $self <database_name> <local_dump_file>"
+	echo
+	echo "   <database_name> "
+	echo "   <local_dump_file> "
+	echo
+	exit 1;
+}
+
+
+# /////////////////// Main
+
+if [ $# -lt 2 ]; then
+	echo "Both a database and a local dump file need to be specified."
+	usage
+fi
+
+database_name=$1
+local_dump_file=$2
+db_user=prophet
+db_host=localhost
+echo "$(date +%T)  Dropping existing prophet databases [${database_name}, ${database_name}_test] in 10 seconds" 
+read -t 10 -p "Hit any key to continue immediately or Ctrl-C to cancel..."
+echo Done
+
+# Drop the existing database before restoring
+echo "dropdb --if-exists -h ${db_host} -U $db_user $database_name"
+dropdb --if-exists -h ${db_host} -U $db_user $database_name
+if [ $? != 0 ]; then
+  echo ""
+  echo "ERROR: .... Dropping failed! Exiting....";
+  exit;
+fi
+
+# Drop the prophet_test database, if it exists
+echo "dropdb --if-exists -h ${db_host} -U $db_user ${database_name}_test"
+dropdb --if-exists -h ${db_host} -U $db_user ${database_name}_test
+if [ $? != 0 ]; then
+  echo ""
+  echo "ERROR: .... Dropping failed! Exiting....";
+  exit;
+fi
+
+echo "createdb -h ${db_host} -U $db_user $database_name"
+createdb -h ${db_host} -U $db_user $database_name
+
+echo ""
+echo "Beginning restore of dump file [$local_dump_file] to database [$database_name]"
+echo "pg_restore -v -h ${db_host} -U $db_user -d $database_name $local_dump_file"
+pg_restore -v -h ${db_host} -U $db_user -d $database_name $local_dump_file
+
+echo ""
+echo "VACUUM database [$database_name]"
+echo "vacuumdb -v -h ${db_host} -U $db_user -d $database_name"
+vacuumdb -v -h ${db_host} -U $db_user -d $database_name
