@@ -20,8 +20,8 @@ for possibleVer in $@ $DEFAULT_JDK; do
       1.7.0_55 | 1.7 | 7)
         tmp_java_home=/usr/lib/jvm/jdk1.7.0_55 ;;
 
-      1.8.0_45 | 1.8 | 8)
-        tmp_java_home=/usr/lib/jvm/jdk1.8.0_45 ;;
+      1.8.0_60 | 1.8 | 8)
+        tmp_java_home=/usr/lib/jvm/jdk1.8.0_60 ;;
     esac
     #debug echo "tmp var = $tmp_java_home" 
     if [ -e $tmp_java_home ] && [ -n "$tmp_java_home" ]; then

@@ -6,3 +6,5 @@ set showmatch
 " Uses comma to go to the next file in a multiple file session
 map , :n
 
+set number
+set relativenumber

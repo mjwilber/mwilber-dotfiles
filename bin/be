@@ -1,0 +1,99 @@
+#!/bin/bash
+# vim: set filetype=sh:
+
+BE_HOME=${BE_HOME:-$HOME/.be-env}
+
+be_version() {
+    echo "◲  be 2.0"
+}
+
+be_usage() {
+	echo "Usage: be <projectName> [<branch>]"
+	echo
+	be_list
+}
+
+be_list() {
+    if [ ! -d "$BE_HOME" ]; then
+        echo "No be home dir! Set BE_HOME to a valid directory or create ~/.be-env"
+        exit 1
+    fi
+
+    find -L "$BE_HOME" -name '*.be' -print0 | while read -d '' -r f; do
+        local name=$(basename "${f//.be/}") 
+        local desc=$(echo_description "$f")
+
+        if [ -z "$desc" ]; then
+            echo "$name"
+        else
+            echo "$name" "-" "$desc"
+        fi
+    done
+}
+
+be_go() {
+    local TO_BE_ENV="$1"
+    local DESKPATH="$(find -L "$BE_HOME" -name "${TO_BE_ENV}.be")"
+    if [ -z "$DESKPATH" ]; then 
+        echo "Be env" "$TO_BE_ENV" "not found in" "$BE_HOME"
+        exit 1
+    else
+        PRJ="${TO_BE_ENV}" PRJ_ENV="${DESKPATH}" $SHELL
+    fi
+}
+
+be_current() {
+    local DESKPATH=$PRJ_ENV
+    if [ -z "$DESKPATH" ]; then
+        echo "No environment activated." 
+        exit 2
+    else
+        basename "${DESKPATH/.be//}"
+        echo_description "$DESKPATH"
+        local CALLABLES=$(get_callables "$DESKPATH")
+
+        [ -z "$CALLABLES" ] || echo ""
+
+        for NAME in $CALLABLES; do
+            local DOCLINE=$(
+                grep -B 1 -E \
+                    "^(alias ${NAME}=|(function )?${NAME}( )?\()" "$DESKPATH" \
+                    | grep "#")
+
+            if [ -z "$DOCLINE" ]; then
+                echo "  ${NAME}"
+            else
+                echo "  ${NAME} -" "${DOCLINE##\# }"
+            fi
+        done
+    fi
+}
+
+## Utilities
+
+# Echo the description of a desk. $1 is the deskfile.
+echo_description() {
+    local descline=$(grep -E "#\s+Description" "$1")
+    echo "${descline##*Description: }"
+}
+
+# Return a list of aliases and functions for a given desk
+get_callables() {
+    local DESKPATH=$1
+    grep -E "^(alias |(function )?[a-zA-Z0-9_-]+( )?\()" "$DESKPATH" \
+        | sed 's/alias \([^= ]*\)=.*/\1/' \
+        | sed -E 's/(function )?([a-zA-Z0-9]*)\(\).*/\2/'
+}
+
+
+PROGRAM="${0##*/}"
+
+case "$1" in
+    # init) shift;               cmd_init "$@" ;;
+    help|--help) shift;        be_usage "$@" ;;
+    version|--version) shift;  be_version "$@" ;;
+    ls|list) shift;            be_list "$@" ;;
+    go|.) shift;               be_go "$@" ;;
+    *)                         be_current "$@" ;;
+esac
+exit 0
