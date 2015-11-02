@@ -26,7 +26,7 @@ function cdgo {
 #mark [-p] mark_name [directory_to_mark]
 function mark {
     if [ $# -gt 1 ] && [ -z "${PRJ}" ]; then
-        echo "No projet environment found!!"
+        echo "No project environment found!!"
     else
       local proj_specific_dir=""
       local directory_to_mark="$(pwd)"
@@ -47,12 +47,12 @@ function mark {
 	  if [ -h "$MARKPATH${proj_specific_dir}/$1" ]; then
 		#debug echo "Replaceing mark: $1" Run: rm "$MARKPATH${proj_specific_dir}/$1"
 		rm "$MARKPATH${proj_specific_dir}/$1" >/dev/null
-	    echo -n "UPDATED ";
-      else
-	    echo -n "CREATED ";
+	    # echo -n "UPDATED ";
+      # else
+	    # echo -n "CREATED ";
       fi
       mkdir -p "$MARKPATH${proj_specific_dir}"; ln -s "$directory_to_mark" "$MARKPATH${proj_specific_dir}/$1"
-      echo "Mark '${proj_specific_dir}/$1' -> $directory_to_mark";
+      # echo "Mark '${proj_specific_dir}/$1' -> $directory_to_mark";
     fi
 }
 function unmark { 
@@ -60,7 +60,14 @@ function unmark {
     [ -n "${PRJ}" ] && [ -e $MARKPATH/${PRJ}-${PBRANCH}/$1 ] && rm -i "$MARKPATH/${PRJ}-${PBRANCH}/$1"
 }
 function marks {
-    ls -l "$MARKPATH" | grep "^l" | sed -r "s/\s+/ /g" | cut -d' ' -f9- | sed 's/ -/\t-/g' && echo
+    find "$MARKPATH" "$MARKPATH/${PRJ}-${PBRANCH}" -maxdepth 1 -type l -print0 | while read -d '' -r f; do
+        local name=$(basename "${f}") 
+        local link=$(readlink "$f" | sed -e "s|$HOME|~|")
+		printf "%12s -> %s\n" $name $link
+    done
+}
+function marks_old {
+    ls -l "$MARKPATH" | grep "^l" | sed -r "s/\s+/ /g" | cut -d' ' -f9- | sed 's/ -/\t-/g' | sed 's/$HOME/~/g' && echo
     [ -n "${PRJ}" ] && [ -d "$MARKPATH/${PRJ}-${PBRANCH}" ] && echo "Project specific marks:" && ls -l "$MARKPATH/${PRJ}-${PBRANCH}" | grep "^l" | sed -r "s/\s+/ /g" | cut -d' ' -f9- | sed 's/ -/\t-/g' && echo
 }
 
