@@ -116,5 +116,5 @@ function use ()
 }
 
 echo " - $PRJ"
-source "$PRJ_ENV"
+source "$PRJ_ENV" "${PRBRANCH:-trunk}"
 

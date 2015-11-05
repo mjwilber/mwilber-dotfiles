@@ -1,5 +1,5 @@
 echo "(prophet.be) $*"
-
+# Description: Prophet environment
 ########################################################
 # Setup project environment.
 # Usage: project <projectName>
@@ -11,6 +11,7 @@ export PBRANCH=${1:-trunk}
 
 # Setup the new project
 export PRJ_HOME=~/projects/$PRJ/${PBRANCH}
+echo PRJ_HOME=$PRJ_HOME
 
 if [ -e "$PRJ_HOME/user.properties" ]; then
 

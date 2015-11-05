@@ -34,11 +34,12 @@ be_list() {
 be_go() {
     local TO_BE_ENV="$1"
     local DESKPATH="$(find -L "$BE_HOME" -name "${TO_BE_ENV}.be")"
+    local DESKBRANCH="${2:-trunk}"
     if [ -z "$DESKPATH" ]; then 
         echo "Be env" "$TO_BE_ENV" "not found in" "$BE_HOME"
         exit 1
     else
-        PRJ="${TO_BE_ENV}" PRJ_ENV="${DESKPATH}" $SHELL
+        PRJ="${TO_BE_ENV}" PRJ_ENV="${DESKPATH}" PRBRANCH=$DESKBRANCH $SHELL
     fi
 }
 
@@ -48,8 +49,9 @@ be_current() {
         echo "No environment activated." 
         exit 2
     else
-        basename "${DESKPATH/.be//}"
-        echo_description "$DESKPATH"
+        basename "${DESKPATH//.be/}"
+        # Need a better way to get a project's description
+		# echo_description "$DESKPATH"
         local CALLABLES=$(get_callables "$DESKPATH")
 
         [ -z "$CALLABLES" ] || echo ""
