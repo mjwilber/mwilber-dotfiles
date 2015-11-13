@@ -1,0 +1,15 @@
+# Expect jdk verison (i.e. 1.8.0_51)
+# Expect to run as root
+
+version=$1
+versionPriority=$(echo $version | sed -e 's/[^0-9]//g')
+
+update-alternatives --install /usr/bin/java java /usr/lib/jvm/jdk${version}/bin/java ${versionPriority} \
+   --slave /usr/share/man/man1/java.1 java.1 /usr/lib/jvm/jdk${version}/man/man1/java.1 \
+   --slave /usr/bin/javac javac /usr/lib/jvm/jdk${version}/bin/javac \
+   --slave /usr/bin/jar jar /usr/lib/jvm/jdk${version}/bin/jar \
+   --slave /usr/lib/jvm/default jdkhome /usr/lib/jvm/jdk${version}
+
+# TODO - include libnpjp2?
+# TODO - Update /usr/bin/jvm/default link
+

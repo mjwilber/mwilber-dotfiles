@@ -59,8 +59,7 @@ for picFile in $*; do
 	imageName=${picFile%.*}
 	# Remove prefix_to_remove if one is defined
 	[ -n $prefix_to_remove ] && imageName=${imageName#*${prefix_to_remove}};
-	exifOrigDate=`exiv2 pr "$picFile" | grep timestamp`;
-	debug "pic date: $exifOrigDate"
+	exifOrigDate=`exiv2 pr $picFile | grep timestamp`;
 	year=${exifOrigDate:18:4}
 	month=${exifOrigDate:23:2}
 	dayOfMonth=${exifOrigDate:26:2}

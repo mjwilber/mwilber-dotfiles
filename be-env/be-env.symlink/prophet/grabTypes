@@ -1,0 +1,10 @@
+#
+# egrep -o "data-dojo-type=\"[^\"]+\"" $1    -- Grab the data-dojo-type portion of the line data-dojo-type="dijit/Foo"
+# sed "s/data-dojo-type=//g"                 -- Remove the data-dojo-type= part
+# sed "s/\$/,/"                              -- Add a comma to the end of each line
+# sed "s/\./\//g"                            -- Find dots and replace them with / dijit.Foo => dijit/Foo
+# sort | uniq                                -- Create produce a unique list of them
+#
+egrep -h -o "data-dojo-type=\"[^\"]+\"" $* | sed "s/data-dojo-type=//g" | sed "s/\$/,/" | sed "s/\./\//g" | sort | uniq
+
+grep -q data-dojo-mixin $* && echo "" && echo "M I X I N S  exist!!!!!!!!!!!";

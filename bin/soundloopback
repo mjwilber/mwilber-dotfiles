@@ -1,0 +1,11 @@
+#!/bin/bash
+case "x$1" in 
+  xon | xstart )
+    pactl load-module module-loopback latency_msec=1
+    exit;;
+  xoff | xstop )
+    pactl unload-module $(pactl list short | grep latency_msec=1 | awk '{print $1}')
+    exit;;
+ * )
+    echo “$0: use with on/off or start/stop” 1>&2; exit 1;;
+esac
