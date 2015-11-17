@@ -35,7 +35,16 @@ be_go() {
     local TO_BE_ENV="$1"
     local DESKPATH="$(find -L "$BE_HOME" -name "${TO_BE_ENV}.be")"
     local DESKBRANCH="${2:-trunk}"
-    if [ -z "$DESKPATH" ]; then 
+
+	# If an explicit .be file doesn't exist, but the project dir does, use generic.be
+    if [ -z "$DESKPATH" ] && [ -d "${HOME}/projects/${TO_BE_ENV}" ]; then 
+	echo "Setting to generic"
+        DESKPATH="$(find -L "$BE_HOME" -name "generic.be")"
+	fi
+
+    # If we still don't have a path to the .be file, then error and exit,
+	# otherwise, setup env variable and open a new shell.
+    if [ -z "$DESKPATH" ]; then
         echo "Be env" "$TO_BE_ENV" "not found in" "$BE_HOME"
         exit 1
     else
@@ -76,7 +85,7 @@ be_current() {
 # Echo the description of a desk. $1 is the deskfile.
 echo_description() {
     local descline=$(grep -E "#\s+Description" "$1")
-    echo "${descline##*Description: }"
+    echo "${descline##*Description: }" # This returns the last description in the file
 }
 
 # Return a list of aliases and functions for a given desk

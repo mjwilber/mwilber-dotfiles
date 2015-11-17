@@ -118,3 +118,6 @@ function use ()
 echo " - $PRJ"
 source "$PRJ_ENV" "${PRBRANCH:-trunk}"
 
+PROPHET_BE_ENV=$(dirname $PRJ_ENV)
+[ -d $PROPHET_BE_ENV ] && [[ ":$PATH:" != *":$PROPHET_BE_ENV:"* ]] && export PATH="$PROPHET_BE_ENV:$PATH"
+

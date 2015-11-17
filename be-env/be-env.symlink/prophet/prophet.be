@@ -54,14 +54,14 @@ function loaddbprops() {
     rm $tmpSrcfile
 }
 
-# Description: Open a psql prompt to the current database
+# Open a psql prompt to the current database
 function sql() {
     loaddbprops
     echo "psql -U ${database_username:-prophet} -h ${database_host:-localhost} -d ${database_name:-prophet}"
     psql -U ${database_username:-prophet} -h ${database_host:-localhost} -d ${database_name:-prophet}
 }
 
-# Description: Open a psql prompt to the current test database
+# Open a psql prompt to the current test database
 function sqltest() {
     loaddbprops
     echo "psql -U ${database_test_username:-${database_username:-prophet}} -h ${database_test_host:-${database_host:-localhost}} -d ${database_test_name:-${database_name:-prophet}_test}"
