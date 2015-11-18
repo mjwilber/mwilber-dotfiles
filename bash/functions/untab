@@ -1,0 +1,15 @@
+function untab() {
+ 	tmpFile=`mktemp`;
+ 	# debug echo $tmpFile
+ 	for f in $*; do
+ 		echo -n "Expanding $f ... ";
+ 		if grep -qP "\t" ${f}
+ 		then
+ 			expand --tabs=4 ${f} > ${tmpFile}; mv ${tmpFile} ${f}
+ 			echo "Complete!"
+ 		else
+ 			echo "No tab characters found"
+ 		fi
+ 	done
+}
+

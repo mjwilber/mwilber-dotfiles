@@ -1,0 +1,2 @@
+# Show perms/owner at each dir level.
+treeperms(){ d=$(cd "$1" ; pwd -P) ; ls -ld "$d"; [[ "$d" != "/" ]] && treeperms $(dirname "$d"); }

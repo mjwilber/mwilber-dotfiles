@@ -8,6 +8,8 @@ echo "(marksrc.bash)"
 
 export MARKPATH=$HOME/.marks
 function go { 
+    [ $# -eq 0 ] && marks && return;
+
     # First check the mark exists - fall through to error message if it doesn't
     [ -e $MARKPATH/$1 ] || [ -e $MARKPATH/$PRJ-$PBRANCH/$1 ] || echo "No such mark: $1"
 
@@ -17,6 +19,8 @@ function go {
     [ -e $MARKPATH/${PRJ}-${PBRANCH}/$1 ] && pushd `readlink $MARKPATH/${PRJ}-${PBRANCH}/$1`
 }
 function cdgo { 
+    [ $# -eq 0 ] && marks && return;
+
     # First check the mark exists - fall through to error message if it doesn't
     [ -e $MARKPATH/$1 ] || [ -e $MARKPATH/$PRJ-$PBRANCH/$1 ] || echo "No such mark: $1"
     [ -e $MARKPATH/$1 ] && cd -P "$MARKPATH/$1" 2>/dev/null
@@ -60,7 +64,7 @@ function unmark {
     [ -n "${PRJ}" ] && [ -e $MARKPATH/${PRJ}-${PBRANCH}/$1 ] && rm -i "$MARKPATH/${PRJ}-${PBRANCH}/$1"
 }
 function marks {
-    find "$MARKPATH" "$MARKPATH/${PRJ}-${PBRANCH}" -maxdepth 1 -type l -print0 | while read -d '' -r f; do
+    find "$MARKPATH" "$MARKPATH/${PRJ}-${PBRANCH}" -maxdepth 1 -type l -print0 2>/dev/null | while read -d '' -r f; do
         local name=$(basename "${f}") 
         local link=$(readlink "$f" | sed -e "s|$HOME|~|")
 		printf "%12s -> %s\n" $name $link

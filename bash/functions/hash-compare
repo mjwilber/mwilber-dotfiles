@@ -1,0 +1,16 @@
+
+hash-compare() {
+    [ "$#" -ne 2 ] && echo "please supply two files to diff" && return
+
+	local sum1=$(md5sum $1)
+	local sum2=$(md5sum $2)
+
+	local hash1="${sum1/$1/}"
+	local hash2="${sum2/$2/}"
+
+	if [ "$hash1" == "$hash2" ]; then
+		echo "identical"
+	else
+		echo "different"
+	fi
+}

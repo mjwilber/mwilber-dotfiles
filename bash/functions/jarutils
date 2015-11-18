@@ -1,0 +1,48 @@
+fij() {
+  search_term=$1
+  shift;
+  file_search=${@:-"*.[jsw]ar"}
+
+  #debug
+  echo "Searching for [${search_term}] in: ${file_search}";
+
+  for j in ${file_search}; do
+     if jar tvf $j | grep "$search_term" >/dev/null; then
+       echo ""; echo $j; jar tvf $j | grep "$search_term";
+     fi
+  done
+}
+
+catmanifest() { # $@ = list of jar(s)
+    for j in $@;  do    unzip -c -q $j META-INF/MANIFEST.MF; done
+}
+  
+catfromjar() { # $@ = jar
+    if [ $# -le 0 ]; then
+      echo "Usage: $0 <jarfile> file0 [fileX ...]";
+      return;
+    fi
+    j=$1;
+    shift;
+    unzip -c -q $j $@
+}
+
+grepmanifest() {
+  grep_flags=""
+
+  # if $1 starts with a dash -> treat these as flags to grep
+  if [ ${1:0:1} == "-" ]; then
+    grep_flags=$1
+    shift;
+  fi
+
+  search_term=$1
+  shift;
+
+  file_search=${@:-"*.[jsw]ar"}
+
+  #debug
+  echo "Searching for [${search_term}] in: ${file_search}: with grep_flags: ${grep_flags}";
+  
+  for j in ${file_search}; do echo ""; echo "#_#_#_#: $j"; catmanifest $j | grep ${grep_flags} ${search_term}; done
+}

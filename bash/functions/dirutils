@@ -1,0 +1,16 @@
+# Go up N directories
+up() {
+  str=""
+  count=0
+  while [ "$count" -lt "$1" ];
+  do
+    str=$str"../"
+    let count=count+1
+  done
+  cd $str
+}
+# Make directory and change into it.
+
+function mcd() {
+  mkdir -p "$1" && cd "$1";
+}

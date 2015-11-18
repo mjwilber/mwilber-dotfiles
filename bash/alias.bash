@@ -1,5 +1,7 @@
 [ -z "$PS1" ] || echo "(alias.bash)"
 
+for func_source in $BASH_CONFIG/functions/*; do  source $func_source; done
+
 #SVN I use a wrapper for it to do some nice terminal and formatting items
 alias svn=svn-wrap.sh
 
@@ -49,82 +51,13 @@ alias home="pushd ${HOME}"
 # sudo mount 192.68.42.64:/media /mnt/readynas 
 # umount /mnt/readynas
 
-# ack could also 
-##!/usr/bin/env bash
-#grep -rI –color –exclude-dir=\.bzr –exclude-dir=\.git –exclude-dir=\.hg –exclude-dir=\.svn –exclude-dir=build –exclude-dir=dist –exclude=tags $*
-
-# PRINT Colors: printf "\e[%dm%d dark\e[0m  \e[%d;1m%d bold\e[0m\n" {30..37}{,,,}
-box() { t="$1xxxx";c=${2:-#}; echo ${t//?/$c}; echo "$c $1 $c"; echo ${t//?/$c}; }
 alias json-decode="php -r 'print_r(json_decode(file_get_contents(\"php://stdin\")));'"
-
-function untab() {
- 	tmpFile=`mktemp`;
- 	# debug echo $tmpFile
- 	for f in $*; do
- 		echo -n "Expanding $f ... ";
- 		if grep -qP "\t" ${f}
- 		then
- 			expand --tabs=4 ${f} > ${tmpFile}; mv ${tmpFile} ${f}
- 			echo "Complete!"
- 		else
- 			echo "No tab characters found"
- 		fi
- 	done
-}
 
 alias removeTrailing="sed 's/\\s\\+$//'"
 
 alias restartUnity="pkill unity-2d-pane"
-# Show perms/owner at each dir level.
-treeperms(){ d=$(cd "$1" ; pwd -P) ; ls -ld "$d"; [[ "$d" != "/" ]] && treeperms $(dirname "$d"); }
 
-
-fij() {
-  search_term=$1
-  shift;
-  file_search=${@:-"*.[jsw]ar"}
-
-  #debug
-  echo "Searching for [${search_term}] in: ${file_search}";
-
-  for j in ${file_search}; do
-     if jar tvf $j | grep "$search_term" >/dev/null; then
-       echo ""; echo $j; jar tvf $j | grep "$search_term";
-     fi
-  done
-}
-
-catmanifest() { # $@ = list of jar(s)
-    for j in $@;  do    unzip -c -q $j META-INF/MANIFEST.MF; done
-}
-  
-catfromjar() { # $@ = jar
-    if [ $# -le 0 ]; then
-      echo "Usage: $0 <jarfile> file0 [fileX ...]";
-      return;
-    fi
-    j=$1;
-    shift;
-    unzip -c -q $j $@
-}
-
-grepmanifest() {
-  grep_flags=""
-
-  # if $1 starts with a dash -> treat these as flags to grep
-  if [ ${1:0:1} == "-" ]; then
-    grep_flags=$1
-    shift;
-  fi
-
-  search_term=$1
-  shift;
-
-  file_search=${@:-"*.[jsw]ar"}
-
-  #debug
-  echo "Searching for [${search_term}] in: ${file_search}: with grep_flags: ${grep_flags}";
-  
-  for j in ${file_search}; do echo ""; echo "#_#_#_#: $j"; catmanifest $j | grep ${grep_flags} ${search_term}; done
-}
-
+# alias update="sudo apt-get -qq update && sudo apt-get upgrade"
+# alias install="sudo apt-get install"
+# alias remove="sudo apt-get remove"
+# alias search="apt-cache search"
