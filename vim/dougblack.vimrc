@@ -1,20 +1,7 @@
-" Tweaked from: 'A Good Vimrc' from: http://dougblack.io/words/a-good-vimrc.html - Douglas Black
-
-" Previous set options to investgate
-set nocompatible
-set showmatch
-"filetype <something> on?
-" set ffs=unix,dos,mac " support all three, in this order
-
+" Douglas Black
 " Colors {{{
 syntax enable           " enable syntax processing
-if has('gui_running')
-    set background=light
-else
-    set background=dark
-endif
-colorscheme solarized
-"colorscheme badwolf - https://github.com/sjl/badwolf/
+colorscheme badwolf
 " }}}
 " Misc {{{
 set ttyfast                     " faster redraw
@@ -31,8 +18,7 @@ filetype plugin on
 set autoindent
 " }}}
 " UI Layout {{{
-set number              " show line number
-set relativenumber      " show line numbers from current
+set number              " show line numbers
 set showcmd             " show command in bottom bar
 set nocursorline          " highlight current line
 set wildmenu
@@ -53,47 +39,74 @@ nnoremap <space> za
 set foldlevelstart=10    " start with fold level of 1
 " }}}
 " Line Shortcuts {{{
-" move vertically by visual line
 nnoremap j gj
 nnoremap k gk
-nnoremap gV `[v`]       " highlight last inserted text
+nnoremap B ^
+nnoremap E $
+nnoremap $ <nop>
+nnoremap ^ <nop>
+nnoremap gV `[v`]
+onoremap an :<c-u>call <SID>NextTextObject('a', 'f')<cr>
+xnoremap an :<c-u>call <SID>NextTextObject('a', 'f')<cr>
+onoremap in :<c-u>call <SID>NextTextObject('i', 'f')<cr>
+xnoremap in :<c-u>call <SID>NextTextObject('i', 'f')<cr>
+ 
+onoremap al :<c-u>call <SID>NextTextObject('a', 'F')<cr>
+xnoremap al :<c-u>call <SID>NextTextObject('a', 'F')<cr>
+onoremap il :<c-u>call <SID>NextTextObject('i', 'F')<cr>
+xnoremap il :<c-u>call <SID>NextTextObject('i', 'F')<cr>
 " }}}
 " Leader Shortcuts {{{
 let mapleader=","
-nnoremap <leader>, :n         " Go to next file
-nnoremap <leader>m :silent make\|redraw!\|cw<CR>    "
-nnoremap <leader>ev :vsp $MYVIMRC<CR>       " Edit my .vimrc
-nnoremap <leader>sv :source $MYVIMRC<CR>    " Source my .vimrc
-nnoremap <leader>l :call ToggleNumber()<CR> " Call funtion below to toggle line number using function below
+nnoremap <leader>m :silent make\|redraw!\|cw<CR>
+nnoremap <leader>w :NERDTree<CR>
+nnoremap <leader>u :GundoToggle<CR>
+nnoremap <leader>h :A<CR>
+nnoremap <leader>ev :vsp $MYVIMRC<CR>
+nnoremap <leader>ez :vsp ~/.zshrc<CR>
+nnoremap <leader>sv :source $MYVIMRC<CR>
+nnoremap <leader>l :call ToggleNumber()<CR>
 nnoremap <leader><space> :noh<CR>
-nnoremap <leader>s :mksession<CR>           " Create session of windows
+nnoremap <leader>s :mksession<CR>
+nnoremap <leader>a :Ag 
+nnoremap <leader>c :SyntasticCheck<CR>:Errors<CR>
 nnoremap <leader>1 :set number!<CR>
+nnoremap <leader>d :Make! 
+nnoremap <leader>r :call RunTestFile()<CR>
+nnoremap <leader>g :call RunGoFile()<CR>
+vnoremap <leader>y "+y
 vmap v <Plug>(expand_region_expand)
 vmap <C-v> <Plug>(expand_region_shrink)
+inoremap jk <esc>
 " }}}
 " Powerline {{{
 "set encoding=utf-8
 "python from powerline.vim import setup as powerline_setup
 "python powerline_setup()
 "python del powerline_setup
-let g:airline_extensions = [ 'branch', 'default']
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
 let g:airline_left_sep = ''
 let g:airline_left_alt_sep = ''
 let g:airline_right_sep = ''
 let g:airline_right_alt_sep = ''
-let g:airline_theme='solarized'
 set laststatus=2
 " }}}
 " CtrlP {{{
-"let g:ctrlp_match_window = 'bottom,order:ttb'
-"let g:ctrlp_switch_buffer = 0
-"let g:ctrlp_working_path_mode = 0
-"let g:ctrlp_custom_ignore = '\vbuild/|dist/|venv/|target/|\.(o|swp|pyc|egg)$'
+let g:ctrlp_match_window = 'bottom,order:ttb'
+let g:ctrlp_switch_buffer = 0
+let g:ctrlp_working_path_mode = 0
+let g:ctrlp_custom_ignore = '\vbuild/|dist/|venv/|target/|\.(o|swp|pyc|egg)$'
+" }}}
+" NERDTree {{{
+let NERDTreeIgnore = ['\.pyc$', 'build', 'venv', 'egg', 'egg-info/', 'dist', 'docs']
+" }}}
+" Syntastic {{{
+let g:syntastic_python_flake8_args='--ignore=E501'
+let g:syntastic_ignore_files = ['.java$']
 " }}}
 " Launch Config {{{
-"runtime! debian.vim
+runtime! debian.vim
 set nocompatible
 call pathogen#infect()
 " }}}
@@ -107,14 +120,16 @@ call pathogen#infect()
 "endif
 "" }}}
 " MacVim {{{
-" set guioptions-=r 
-" set guioptions-=L
+set guioptions-=r 
+set guioptions-=L
 " }}}
 " AutoGroups {{{
 augroup configgroup
     autocmd!
     autocmd VimEnter * highlight clear SignColumn
     autocmd BufWritePre *.php,*.py,*.js,*.txt,*.hs,*.java,*.md,*.rb :call <SID>StripTrailingWhitespaces()
+    autocmd BufEnter *.cls setlocal filetype=java
+    autocmd BufEnter *.zsh-theme setlocal filetype=zsh
     autocmd BufEnter Makefile setlocal noexpandtab
     autocmd BufEnter *.sh setlocal tabstop=2
     autocmd BufEnter *.sh setlocal shiftwidth=2
@@ -137,6 +152,28 @@ function! ToggleNumber()
         set relativenumber
     endif
 endfunc
+
+function! RunTestFile()
+    if(&ft=='python')
+        exec ":!" . ". venv/bin/activate; nosetests " .bufname('%') . " --stop"
+    endif
+endfunction
+
+function! RunGoFile()
+    if(&ft=='go')
+        exec ":new|0read ! go run " . bufname('%')
+    endif
+endfunction
+
+function! RunTestsInFile()
+    if(&ft=='php')
+        :execute "!" . "/Users/dblack/pear/bin/phpunit -d memory_limit=512M -c /usr/local/twilio/src/php/tests/config.xml --bootstrap /usr/local/twilio/src/php/tests/bootstrap.php " . bufname('%') . ' \| grep -v Configuration \| egrep -v "^$" '
+    elseif(&ft=='go')
+        exec ":!gp test"
+    elseif(&ft=='python')
+        exec ":read !" . ". venv/bin/activate; nosetests " . bufname('%') . " --nocapture"
+    endif
+endfunction
 
 " strips trailing whitespace at the end of files. this
 " is called on buffer write in the autogroup above.

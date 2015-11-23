@@ -32,7 +32,7 @@ mark -p pweb $PRJ_HOME/deploy/prophet.ear/web.war/prophet
 mark -p webapp $PRJ_HOME/deploy/webapps/ROOT
 mark -p etc $PRJ_HOME/etc
 mark -p modules $PRJ_HOME/modules
-mark -p modules $PRJ_HOME/var/databases/export/patch
+mark -p patch $PRJ_HOME/var/databases/export/patch
 
 function loaddbprops() {
     pfile="$PRJ_HOME/etc/prophet/$USER.properties" 
