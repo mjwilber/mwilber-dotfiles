@@ -15,5 +15,6 @@ for file in $linkables ; do
       # $file is already absolute no need to specify DOTFILES again
       # ln -s $DOTFILES/$file $target
       ln -s $file $target
+      echo " -- CREATED"
     fi
 done
