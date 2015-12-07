@@ -58,6 +58,12 @@ svn_version()
     $SVN --version
 }
 
+_svn_temp_html_filename()
+{
+  local fname="${svn_tmp}/$PRJ-${PBRANCH}-${1:-"NONE"}-`date +%F-%H%M`.html"
+  echo $fname
+}
+
 svn_help()
 {
   if [ $# -eq 0 ]; then
@@ -140,8 +146,9 @@ svn_update()
   echo "$svn_update_out" | sed "$sed_svn_up_colors"
   new_rev=`svn_revision || abort 'Cannot get updated revision number'`
   if [ $old_rev -ne $new_rev ]; then
-	  $SVN log -r $old_rev:$new_rev | svnupdate2html.awk > ${svn_tmp}/${PBRANCH}-update-`date +%F-%H%M`.html
-	  echo "Update log available at: file://${svn_tmp}/${PBRANCH}-update-`date +%F-%H%M`.html"
+    local tfile=$(_svn_temp_html_filename "update")
+    $SVN log -r $old_rev:$new_rev | svnupdate2html.awk -v prj="$PRJ" > $tfile
+	  echo "Update log available at: file://${tfile}"
   fi
   return $svn_update_rv
 }
@@ -209,8 +216,9 @@ svn_report()
   #debug: return;
 
   if [ $old_rev != $new_rev ]; then
-	  $SVN log -r $old_rev:$new_rev | svnupdate2html.awk > ${svn_tmp}/${PBRANCH}-report-`date +%F-%H%M`.html
-	  echo "Update log available at: file://${svn_tmp}/${PBRANCH}-report-`date +%F-%H%M`.html"
+    local tfile=$(_svn_temp_html_filename "report")
+	  $SVN log -r $old_rev:$new_rev | svnupdate2html.awk -v prj="$PRJ" > $tfile
+	  echo "Update log available at: file://$tfile" 
   else
       echo "Unchanged versions: nothing to report"
   fi
@@ -226,9 +234,10 @@ svn_weeks_report()
   
   echo SVN_REPORT_BY_USER = [$SVN_REPORT_BY_USER]
   [ -n "$SVN_REPORT_BY_USER" ] &&  echo "Generating report for only versions by $SVN_REPORT_BY_USER"
-  $SVN log -r {`date -d -8days +%Y-%m-%d`}:HEAD | svnupdate2html.awk > ${svn_tmp}/${PBRANCH}-weeksreport-`date +%F-%H%M`.html
+  local tfile=$(_svn_temp_html_filename "update")
+  $SVN log -r {`date -d -8days +%Y-%m-%d`}:HEAD | svnupdate2html.awk -v prj="$PRJ" > $tfile
   unset SVN_REPORT_BY_USER;
-	echo "Update log available at: file://${svn_tmp}/${PBRANCH}-weeksreport-`date +%F-%H%M`.html"
+	echo "Update log available at: file://${tfile}"
 }
 #########################################################################
 #

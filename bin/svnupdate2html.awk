@@ -38,7 +38,7 @@ BEGIN {
 
 		print "    <table class=\"log_entry\" width=\"15%\">";
 		print "      <tr>";
-		print "      <td rowspan=\"2\" class=\"entry_rev\"><a href=\"http://svn.bybaxter.com/cgi-bin/viewvc.cgi/prophet?view=rev&revision="substr($1,2)"\">" $1 "</a></td>";
+		print "      <td rowspan=\"2\" class=\"entry_rev\"><a href=\"http://svn.bybaxter.com/cgi-bin/viewvc.cgi/"prj"?view=rev&revision="substr($1,2)"\">" $1 "</a></td>";
 		print "      <td class=\"entry_submiter\">" $2 "</td>";
 		print "      <td class=\"entry_time\">" $3 "</td>";
 		print "      <td class=\"entry_lines\">" $4 "</td>";
