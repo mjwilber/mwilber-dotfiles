@@ -80,6 +80,28 @@ be_current() {
     fi
 }
 
+be_edit() {
+    if [ $# -eq 0 ]; then
+        if [ -z "$PRJ_ENV" ]; then
+            echo "No environment activated."
+            exit 3
+        fi
+        local DESKNAME_TO_EDIT="$PRJ"
+    elif [ $# -eq 1 ]; then
+        local DESKNAME_TO_EDIT="$1"
+    else
+        echo "Usage: ${PROGRAM} edit [prj-name]"
+        exit 1
+    fi
+
+    local DESKEXT=.be    # $(get_deskfile_extension)
+    local EDIT_PATH="$(find -L "$BE_HOME" -name "${DESKNAME_TO_EDIT}${DESKEXT}")"
+
+    ${EDITOR:-vi} "$EDIT_PATH" 
+
+    # TODO: If just edit current or DESKNAME_TO_EDIT == current
+}
+
 ## Utilities
 
 # Echo the description of a desk. $1 is the deskfile.
@@ -105,6 +127,7 @@ case "$1" in
     version|--version) shift;  be_version "$@" ;;
     ls|list) shift;            be_list "$@" ;;
     go|.) shift;               be_go "$@" ;;
+    edit|e) shift;               be_edit "$@" ;;
     *)                         be_current "$@" ;;
 esac
 exit 0
