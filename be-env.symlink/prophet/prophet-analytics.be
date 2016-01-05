@@ -28,6 +28,18 @@ use jdk 8
 
 mark -p phome $PRJ_HOME
 
+# Extract the cmd-client tar file to the current directory
+function extractCmdClient() {
+    local outputDir=${1:-.}
+    local tarfile=$(find ${PRJ_HOME}/cmd-client/build/distributions -name "prophet-analytics-cmd-client-*.tar")
+    [ ! -e "$tarfile" ] && echo "No tar file present" && return 3
+
+    echo "Untarring: $tarfile"
+    echo "       to: $outputDir"
+    echo "tar xvf $tarfile -C $outputDir"
+    tar xvf "$tarfile" -C $outputDir
+}
+
 function loaddbprops() {
     pfile="$PRJ_HOME/etc/prophet/$USER.properties" 
     echo $pfile

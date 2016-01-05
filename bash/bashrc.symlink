@@ -15,7 +15,8 @@ if [ -n "$PS1" ]; then # Run the rest only for interactive shells
 	[ -d $BASH_CONFIG ] && for bash_config in $BASH_CONFIG/*.bash; do  source $bash_config; done
 
     # Add .dotfiles/bin to path f not in path
-    [ -d $DOTFILES/bin ] && [[ ":$PATH:" != *":$DOTFILES/bin:"* ]] && echo "Adding" && export PATH="$DOTFILES/bin:$PATH"
+    #DEBUG [ -d $DOTFILES/bin ] && [[ ":$PATH:" != *":$DOTFILES/bin:"* ]] && echo "Adding" && export PATH="$DOTFILES/bin:$PATH"
+    [ -d $DOTFILES/bin ] && [[ ":$PATH:" != *":$DOTFILES/bin:"* ]] && export PATH="$DOTFILES/bin:$PATH"
 
     # Allow for local shell modifications
 	[ -e ~/.localrc ] && source ~/.localrc

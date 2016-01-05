@@ -33,6 +33,7 @@ mark -p webapp $PRJ_HOME/deploy/webapps/ROOT
 mark -p etc $PRJ_HOME/etc
 mark -p modules $PRJ_HOME/modules
 mark -p patch $PRJ_HOME/var/databases/export/patch
+mark data ~/projects/prophet-data
 
 function loaddbprops() {
     pfile="$PRJ_HOME/etc/prophet/$USER.properties" 
