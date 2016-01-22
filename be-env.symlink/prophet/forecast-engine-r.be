@@ -1,13 +1,13 @@
-echo "(generic.be) $*"
+echo "(forecast-engine-r.be) $*"
 ########################################################
-# Description: A generic project setup (PRJ_HOME=~/projects/<PRJ>)
+# Description: A forecast-engine-r project setup (PRJ_HOME=~/projects/<PRJ>)
 # Setup project environment.
 # Usage: project <projectName>
 # Variables set: PRJ, PRJ_HOME, ANT_HOME, PATH, JAVA_HOME
 #
 
 export PRJ
-#export PRJ_NAME=<use to override liquid prompt display name
+export PRJ_NAME="R-forecast-engine"
 export PBRANCH=${1:-trunk}
 
 # Setup the new project

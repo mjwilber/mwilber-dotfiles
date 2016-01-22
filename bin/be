@@ -2,6 +2,7 @@
 # vim: set filetype=sh:
 
 BE_HOME=${BE_HOME:-$HOME/.be-env}
+PROJECTS_HOME=${PROJECTS_HOME:-$HOME/projects}
 
 be_version() {
     echo "◲  be 2.0"
@@ -9,7 +10,7 @@ be_version() {
 
 be_usage() {
 	echo "Usage: be <op> <projectName> [<branch>]"
-    echo "       op :== <help|version|ls|list|go|.|edit>"
+    echo "       op :== <help|version|ls|list|go|edit|create>"
 	echo
 	be_list
 }
@@ -38,7 +39,7 @@ be_go() {
     local DESKBRANCH="${2:-trunk}"
 
 	# If an explicit .be file doesn't exist, but the project dir does, use generic.be
-    if [ -z "$DESKPATH" ] && [ -d "${HOME}/projects/${TO_BE_ENV}" ]; then 
+    if [ -z "$DESKPATH" ] && [ -d "${PROJECTS_HOME}/${TO_BE_ENV}" ]; then 
 	echo "Setting to generic"
         DESKPATH="$(find -L "$BE_HOME" -name "generic.be")"
 	fi
@@ -79,6 +80,38 @@ be_current() {
             fi
         done
     fi
+}
+
+# Create a project environment create <projectname> <branch>
+be_create() {
+    if [ $# -eq 0 ]; then
+        echo "be create <project> [branch]"
+        echo
+        exit 3
+    fi
+    local project=${1}
+    local branch=${2:-trunk}
+
+    if [ -d "" ]; then
+        echo "Environment already exists: ${PROJECTS_HOME}/$project/$branch"
+    else
+        echo "Creating envionment: ${PROJECTS_HOME}/$project/$branch"
+        mkdir -p "${PROJECTS_HOME}/$project/$branch"
+    fi
+
+    local DESKEXT=.be
+    local BEFILE_PATH="$(find -L "$BE_HOME" -name "${project}${DESKEXT}")"
+    echo BEFILE_PATH=$BEFILE_PATH
+    if [ ! -e "$BEFILE_PATH" ]; then
+        if [ -e "$BE_HOME/generic${DESKEXT}" ]; then
+            echo "Creating environment file: ${BE_HOME}/${project}.be"
+            cat "$BE_HOME/generic${DESKEXT}" | sed "s/generic/${project}/g" > "${BE_HOME}/${project}.be"
+        else
+            touch "${BE_HOME}/${project}.be"
+        fi 
+    fi
+
+    be_edit $project
 }
 
 be_edit() {
@@ -128,7 +161,8 @@ case "$1" in
     version|--version) shift;  be_version "$@" ;;
     ls|list) shift;            be_list "$@" ;;
     go|.) shift;               be_go "$@" ;;
-    edit|e) shift;               be_edit "$@" ;;
+    edit|e) shift;             be_edit "$@" ;;
+    create|c) shift;           be_create "$@" ;;
     *)                         be_current "$@" ;;
 esac
 exit 0

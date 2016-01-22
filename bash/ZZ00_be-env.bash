@@ -13,7 +13,7 @@ _be_completion() {
 
     case ${COMP_CWORD} in
         1)
-            COMPREPLY=($(compgen -W "edit . go help list ls version" ${cur}))
+            COMPREPLY=($(compgen -W "edit . go help list ls version edit create" ${cur}))
             ;;
         2)
             case ${prev} in
