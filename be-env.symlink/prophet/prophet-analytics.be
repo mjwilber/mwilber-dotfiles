@@ -7,6 +7,7 @@ echo "(prophet-analytics.be) $*"
 #
 
 export PRJ=prophet-analytics
+export PRJ_NAME=analytics
 export PBRANCH=${1:-trunk}
 
 # Setup the new project

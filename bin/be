@@ -8,7 +8,8 @@ be_version() {
 }
 
 be_usage() {
-	echo "Usage: be <projectName> [<branch>]"
+	echo "Usage: be <op> <projectName> [<branch>]"
+    echo "       op :== <help|version|ls|list|go|.|edit>"
 	echo
 	be_list
 }

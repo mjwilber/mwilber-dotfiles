@@ -61,3 +61,5 @@ alias restartUnity="pkill unity-2d-pane"
 # alias install="sudo apt-get install"
 # alias remove="sudo apt-get remove"
 # alias search="apt-cache search"
+
+alias liq="source $DOTFILES/liquidprompt/liquidprompt; [[ -n '${PRJ_NAME:-$PRJ}' ]] && prompt_tag ${PRJ_NAME:-$PRJ}"

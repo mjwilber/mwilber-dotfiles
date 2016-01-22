@@ -6,3 +6,6 @@
 
 --type-set
 freemarker=.ftl
+
+--type-set
+properties=.properties

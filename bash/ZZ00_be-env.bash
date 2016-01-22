@@ -107,3 +107,4 @@ source "$PRJ_ENV" "${PRBRANCH:-trunk}"
 PROPHET_BE_ENV=$(dirname $PRJ_ENV)
 [ -d $PROPHET_BE_ENV ] && [[ ":$PATH:" != *":$PROPHET_BE_ENV:"* ]] && export PATH="$PROPHET_BE_ENV:$PATH"
 
+[[ -n "$LP_OS" ]] && type -t prompt_tag && prompt_tag $PRJ
