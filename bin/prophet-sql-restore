@@ -26,10 +26,12 @@ fi
 
 database_name=$1
 local_dump_file=$2
-db_user=prophet
-db_host=localhost
-echo "$(date +%T)  Dropping existing prophet databases [${database_name}, ${database_name}_test] in 10 seconds" 
-read -t 10 -p "Hit any key to continue immediately or Ctrl-C to cancel..."
+db_user=${db_user:-prophet}
+db_host=${db_host:-localhost}
+echo "$(date +%T)  Dropping existing databases"
+echo "           Host: ${db_host}"
+echo "           Databases: ${database_name}, ${database_name}_test"
+read -t 10 -p "Hit any key to continue immediately or Ctrl-C within 10 seconds to cancel..."
 echo Done
 
 # Drop the existing database before restoring
