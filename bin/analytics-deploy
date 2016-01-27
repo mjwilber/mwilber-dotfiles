@@ -1,0 +1,35 @@
+#!/bin/bash
+
+
+publish_dir=${1:-/tmp/analytics-pub}
+
+artifacts_sources="prophet-analytics-core-1.0.0-sources.jar prophet-analytics-client-1.0.0-sources.jar"
+sources_dir=lib/sources
+artifacts_jars="prophet-analytics-core-1.0.0.jar prophet-analytics-client-1.0.0.jar"
+jars_dir=deploy/prophet.ear/web.war/WEB-INF/lib 
+artifacts_tools="prophet-analytics-server-1.0.0.tar"
+tools_dir=tools
+artifacts="${artifacts_sources} ${artifacts_jars} ${artifacts_tools}"
+
+die() { echo -e "\n\e[1;31m${1}\e[0m" && exit 2; }
+success() { echo -e "\n\e[1;32m${1}\e[0m"; }
+
+[ ! -d ${sources_dir} ] && die "You need to be in a PROPHET_HOME - ${sources_dir}"
+[ ! -d ${tools_dir} ] && die "You need to be in a PROPHET_HOME - ${tools_dir}"
+[ ! -d ${jars_dir} ] && die "You need to be in a PROPHET_HOME - ${jars_dir}"
+
+[ ! -d "${publish_dir}" ] && die "Publishing directory does not exist: ${publish_dir}"
+for a in $artifacts; do
+    [ ! -e "${publish_dir}/$a" ] && die "Couldn't find '$a'"
+done
+
+success "Deploying artifacts from '${publish_dir}'"
+
+for s in $artifacts_sources; do cp -vu $publish_dir/$s $sources_dir; done
+for j in $artifacts_jars; do cp -vu $publish_dir/$j $jars_dir; done
+
+[ -d "${tools_dir}/prophet-analytics-server-1.0.0" ] && echo "Removing old untared analytics server" && rm -rf "${tools_dir}/prophet-analytics-server-1.0.0"
+for t in $artifacts_tools; do cp -vu $publish_dir/$t $tools_dir; done
+
+success "Done"
+

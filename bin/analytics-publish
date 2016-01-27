@@ -1,0 +1,27 @@
+#!/bin/bash
+
+publish_dir=${1:-/tmp/analytics-pub}
+
+to_copy="./server/build/distributions/prophet-analytics-server-1.0.0.tar ./core/build/libs/prophet-analytics-core-1.0.0.jar ./core/build/libs/prophet-analytics-core-1.0.0-sources.jar ./client/build/libs/prophet-analytics-client-1.0.0.jar ./client/build/libs/prophet-analytics-client-1.0.0-sources.jar"
+
+die() { echo -e "\n\e[1;31m${1}\e[0m" && exit 2; }
+success() { echo -e "\n\e[1;32m${1}\e[0m"; }
+
+[ ! -e "./core/build/libs/prophet-analytics-core-1.0.0.jar" ] && die "No jars to distribute. Run assemble"
+[ ! -e "./server/build/distributions/prophet-analytics-server-1.0.0.tar" ] && die "No tar to distribute. Run distTar"
+[ ! -e "./core/build/libs/prophet-analytics-core-1.0.0-sources.jar" ] && die "No source jars to distribute. Run sourceJar"
+
+for a in $to_copy; do
+    [ ! -e "$a" ] && die "Couldn't find '$a'"
+done
+
+
+[ -d "${publish_dir}" ] && die "Publishing directory exists '${publish_dir}'"
+
+echo "Publishing artifacts to '${publish_dir}'"
+mkdir "${publish_dir}"
+
+cp -v $to_copy "$publish_dir"
+
+success "Done"
+
