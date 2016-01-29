@@ -58,8 +58,8 @@ function loaddbprops() {
 # Open a psql prompt to the current database
 function sql() {
     loaddbprops
-    echo "psql -U ${database_username:-prophet} -h ${database_host:-localhost} -d ${database_name:-prophet}"
-    psql -U ${database_username:-prophet} -h ${database_host:-localhost} -d ${database_name:-prophet}
+    echo "psql -U ${database_username:-prophet} -h ${database_host:-localhost} -d ${database_name:-prophet} \"$@\""
+    psql -U ${database_username:-prophet} -h ${database_host:-localhost} -d ${database_name:-prophet} $@
 }
 
 # Open a psql prompt to the current test database

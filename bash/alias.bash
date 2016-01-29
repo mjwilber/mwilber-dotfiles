@@ -67,3 +67,6 @@ alias restartUnity="pkill unity-2d-pane"
 # alias search="apt-cache search"
 
 alias liq='source $DOTFILES/liquidprompt/liquidprompt; [[ -n "${PRJ_NAME:-$PRJ}" ]] && prompt_tag ${PRJ_NAME:-$PRJ}'
+
+# Dev tools
+alias gw="./gradlew"
