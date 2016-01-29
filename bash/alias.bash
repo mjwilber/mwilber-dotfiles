@@ -26,6 +26,10 @@ alias dirs='ls -adlF'
 # alias whence='type -a'
 alias which='type -a'
 #
+
+# Turn bc into a floating point beast
+alias bc='bc -l'
+
 # # Alias out some shell/process status items
 alias h='history'
 alias j='jobs -l'

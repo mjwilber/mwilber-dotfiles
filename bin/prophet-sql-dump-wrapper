@@ -1,0 +1,20 @@
+#!/bin/bash
+# A script to call ..../prophet-sql-dump by crontab to dump dev-trunk-goldendb in the early mornings.
+
+# According to TeamCity: dev-trunk-goldendb is triggered at 23:10 (CST) daily
+
+dev_trunk_golden_dump_dir=/home/mwilber/projects/prophet-data/dev-trunk-goldendb-daily
+dump_file="${dev_trunk_golden_dump_dir}/dev-trunk-goldendb-$(date +\%Y\%m\%d-\%H\%M).dump"
+link_file="$(dirname $(dirname $dump_file))/dev-trunk-goldendb-daily-latest.dump"
+
+# Make sure the directory exists
+mkdir -p ${dev_trunk_golden_dump_dir}
+
+# Clean out older files
+# find ${dev_trunk_golden_dump_dir} -mtime +20 -exec rm {} \;
+
+# To let the authorization be automated put the password in ~/.pgpass
+~mwilber/.dotfiles/bin/prophet-sql-dump dev-trunk-goldendb "${dump_file}"
+
+rm -f "${link_file}"
+ln -s "${dump_file}" "${link_file}"

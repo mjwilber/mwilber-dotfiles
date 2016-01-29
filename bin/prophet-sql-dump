@@ -30,7 +30,7 @@ else
 fi
 
 #destinationDir=$dbHost
-destinationFile=${dbHost}_`date +%F`_prophet.dump
+destinationFile=${2:-${dbHost}_`date +%F`_prophet.dump}
 
 if [ -r $destinationFile ]; then
 	echo "WARN: $destinationFile already exists. It will be overwritten!"
