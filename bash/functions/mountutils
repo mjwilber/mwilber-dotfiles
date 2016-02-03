@@ -1,0 +1,9 @@
+# Go up N directories
+mountiso() {
+  local iso=${1}
+  local isomount=${2:-/media/iso}
+  
+  read -t 10 -p "Attempting to mount iso:$iso to dir:$isomount Ctrl-C to stop"
+  sudo mkdir -p "$isomount"
+  sudo mount -o loop "${iso}" "${isomount}"
+}
