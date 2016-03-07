@@ -9,10 +9,9 @@ usage()
 	echo "Destroy and recreate a database and restore from a local file"
 	echo
 	echo "Usage: $self <database_name> <local_dump_file>"
-	echo
 	echo "   <database_name> "
 	echo "   <local_dump_file> "
-	echo
+	echo "   db_host and db_user may be set in order to affect another host/user"
 	exit 1;
 }
 

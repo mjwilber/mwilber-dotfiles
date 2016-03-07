@@ -23,8 +23,9 @@ alias lla='ls --color=auto -alF'
 alias dirs='ls -adlF'
 
 # alias which 'alias | /usr/bin/which --tty-only --read-alias --show-dot --show-tilde'
-# alias whence='type -a'
-alias which='type -a'
+alias whence='type -a'
+# Leave which alone as /bin/which simply returns the file path which is more handy usually
+# alias which='type -a'
 #
 
 # Turn bc into a floating point beast
