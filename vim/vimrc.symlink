@@ -58,6 +58,14 @@ nnoremap j gj
 nnoremap k gk
 nnoremap gV `[v`]       " highlight last inserted text
 " }}}
+" Filetype overrides {{{
+augroup markdown
+    " remove previous autocmds
+    autocmd!
+    " set every new or read *.md buffer to use the markdown filetype
+    autocmd BufRead,BufNew *.md set filetype=markdown
+augroup END
+" }}}
 " Leader Shortcuts {{{
 let mapleader=","
 nnoremap <leader>, :n         " Go to next file

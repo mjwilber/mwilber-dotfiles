@@ -90,9 +90,9 @@ ${color3}${membar 4}${color1}
 ${template0 HDD 2}
 Disk IO${alignr}${diskio}
 ${color3}${diskiograph 474747 E9E9E9}${color1}
-Root: ${fs_used_perc /}% ${fs_used /} ${fs_bar 6 /}
-Home: ${fs_used_perc /homedata}% ${fs_used /homedata} ${fs_bar 6 /homedata}
-Data: ${fs_used_perc /data}% ${fs_used /data} ${fs_bar 6 /data}${color}
+Root: ${fs_used_perc /}% ${fs_free /} ${fs_bar 6 /}
+Home: ${fs_used_perc /homedata}% ${fs_free /homedata} ${fs_bar 6 /homedata}
+Data: ${fs_used_perc /data}% ${fs_free /data} ${fs_bar 6 /data}${color}
 #
 ${template0 NETWORK\ (${addr\ eth0}) 2}
 Up:   ${upspeed eth0}/s ${alignr}Down: ${downspeed eth0}/s
