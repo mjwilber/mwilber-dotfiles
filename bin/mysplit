@@ -4,8 +4,8 @@ die() { echo -e "\n\e[1;31m${1}\e[0m" && exit 2; }
 success() { echo -e "\n\e[1;32m${1}\e[0m"; }
 
 [ -z "$1" ] && die "A filename is expected: Usage $(basename $0) <file> ]"
-file_to_split=$1
-prefix=$(basename $file_to_split).
+file_to_split="$1"
+prefix=$(basename "$file_to_split").
 
-echo split --numeric-suffixes --bytes=20M --verbose $file_to_split  $prefix
-split --numeric-suffixes --bytes=20M --verbose $file_to_split  $prefix
+echo split --numeric-suffixes --bytes=20M --verbose "$file_to_split"  "$prefix"
+split --numeric-suffixes --bytes=20M --verbose "$file_to_split"  "$prefix"
