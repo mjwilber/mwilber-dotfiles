@@ -1,0 +1,9 @@
+
+# PRINT Colors: printf "\e[%dm%d dark\e[0m  \e[%d;1m%d bold\e[0m\n" {30..37}{,,,}
+function h() { 
+    if [ "$#" -eq 0 ]; then
+        history;
+    else
+        history | grep $@;
+    fi
+}

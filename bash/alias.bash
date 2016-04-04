@@ -32,7 +32,8 @@ alias whence='type -a'
 alias bc='bc -l'
 
 # # Alias out some shell/process status items
-alias h='history'
+# alias h='history' - See functions
+
 alias j='jobs -l'
 alias path='echo -e ${PATH//:/\\n}'
 # alias classpath='echo -e ${CLASSPATH//:/\\n}'
