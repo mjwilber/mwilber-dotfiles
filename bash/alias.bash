@@ -16,11 +16,11 @@ alias mreo='less'
 
 # Alias out some standard shell commands with additional flags
 alias rm='rm -v'
-alias ls='ls --color=auto -F'
-alias la='ls --color=auto -aF'
-alias ll='ls --color=auto -lF'
-alias lla='ls --color=auto -alF'
-alias dirs='ls -adlF'
+alias ls='ls --color=auto -Fh'
+alias la='ls --color=auto -ahF'
+alias ll='ls --color=auto -lhF'
+alias lla='ls --color=auto -alhF'
+alias dirs='ls -adlhF'
 
 # alias which 'alias | /usr/bin/which --tty-only --read-alias --show-dot --show-tilde'
 alias whence='type -a'
