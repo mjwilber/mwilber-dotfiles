@@ -31,6 +31,9 @@ alias whence='type -a'
 # Turn bc into a floating point beast
 alias bc='bc -l'
 
+# Simplify just getting the date in YYYY-mm-dd (%F) format
+alias dt='date +%F'
+
 # # Alias out some shell/process status items
 # alias h='history' - See functions
 
