@@ -36,7 +36,7 @@ be_list() {
 be_go() {
     local TO_BE_ENV="$1"
     local DESKPATH="$(find -L "$BE_HOME" -name "${TO_BE_ENV}.be")"
-    local DESKBRANCH="${2:-trunk}"
+    local DESKBRANCH="${2:-develop}"
 
 	# If an explicit .be file doesn't exist, but the project dir does, use generic.be
     if [ -z "$DESKPATH" ] && [ -d "${PROJECTS_HOME}/${TO_BE_ENV}" ]; then 
@@ -90,7 +90,7 @@ be_create() {
         exit 3
     fi
     local project=${1}
-    local branch=${2:-trunk}
+    local branch=${2:-develop}
 
     if [ -d "" ]; then
         echo "Environment already exists: ${PROJECTS_HOME}/$project/$branch"
