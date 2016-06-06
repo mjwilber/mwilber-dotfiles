@@ -7,8 +7,16 @@ case "$1" in
 		tmp_gradle_home=${PRJ_HOME}/tools/$proj_gradle_dir;
 		;;
 
-  1.12 | * )
+  1.12 )
 		tmp_gradle_home=/opt/gradle/1.12;
+		;;
+
+  2 | 2.13 )
+		tmp_gradle_home=/opt/gradle/gradle-2.13;
+		;;
+
+  * )
+		tmp_gradle_home=/opt/gradle/default
 		;;
 esac
 
