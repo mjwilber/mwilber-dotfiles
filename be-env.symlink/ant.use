@@ -5,7 +5,7 @@ case "$1" in
 #		tmp_ant_home=${PRJ_HOME}/tools/lib/ant ;;
 
   prophet_proj | *)
-  		proj_ant_dir=$( find $PRJ_HOME/tools -maxdepth 1 -name "*ant*" -type d -exec basename {} \; | sort -r );
+  		proj_ant_dir=$( find $PRJ_HOME/tools -maxdepth 1 -name "*ant-*" -type d -exec basename {} \; | sort -r );
 		tmp_ant_home=${PRJ_HOME}/tools/$proj_ant_dir;
 		;;
 esac
