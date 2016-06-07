@@ -27,6 +27,17 @@ function cdgo {
     [ -e $MARKPATH/${PRJ}-${PBRANCH}/$1 ] && cd -P $MARKPATH/${PRJ}-${PBRANCH}/$1
 }
 
+function markprint {
+    if [ $# -gt 0 ]; then
+        local marklink=$(find "$MARKPATH" "$MARKPATH/${PRJ}-${PBRANCH}" -maxdepth 1 -type l -print | grep "$1" | head -1);
+        if [ -n "$marklink" ] && [ -e "$marklink" ]; then
+            # One arg means to print the mark destination out
+            readlink "$marklink"
+        fi
+    fi
+}
+
+
 #TODO:Check for absolute directory or document that a second arg can be relative, but then it will always be relative
 #TODO:Use mark to set absolute directories using a second arg
 #mark [-p] mark_name [directory_to_mark]
@@ -34,10 +45,10 @@ function mark {
     if [ $# -gt 1 ] && [ "$1" == "-p" ] && [ -z "${PRJ}" ]; then
         echo "No project environment found!!"
     else
-      local proj_specific_dir=""
+      local proj_specific_dir="/"
       # Test for -p is $1 - Could not get getopts to register correctly     while getopts p o; do
       if [ "$1" == "-p" ]; then
-        proj_specific_dir="/${PRJ}-${PBRANCH}" 
+        proj_specific_dir="/${PRJ}-${PBRANCH}/" 
         shift
       fi 
       # If there are two arguments the first is the mark and the second is what the marks points
@@ -52,16 +63,16 @@ function mark {
       #debug echo directory_to_mark=$directory_to_mark
       #debug echo "mkdir -p \"$MARKPATH${proj_specific_dir}\"; ln -s \"$(pwd)\" \"$MARKPATH${proj_specific_dir}/$1\"";
 	  #debug echo ${proj_specific_dir}/$1
-	  if [ -h "$MARKPATH${proj_specific_dir}/${mark_name}" ]; then
+	  if [ -h "$MARKPATH${proj_specific_dir}${mark_name}" ]; then
 		#debug echo "Replaceing mark: ${mark_name}" Run: rm "$MARKPATH${proj_specific_dir}/${mark_name}"
-		rm "$MARKPATH${proj_specific_dir}/${mark_name}" >/dev/null
+		rm "$MARKPATH${proj_specific_dir}${mark_name}" >/dev/null
 	    # echo -n "UPDATED ";
       # else
 	    # echo -n "CREATED ";
       fi
-      mkdir -p "$MARKPATH${proj_specific_dir}"; ln -s "$directory_to_mark" "$MARKPATH${proj_specific_dir}/${mark_name}"
+      mkdir -p "$MARKPATH${proj_specific_dir}"; ln -s "$directory_to_mark" "$MARKPATH${proj_specific_dir}${mark_name}"
       # TODO: Use options (add quiet version as an option)
-      echo "Mark '${proj_specific_dir}/${mark_name}' -> $directory_to_mark";
+      echo "Mark '${proj_specific_dir}${mark_name}' -> $directory_to_mark";
     fi
 }
 function unmark { 
