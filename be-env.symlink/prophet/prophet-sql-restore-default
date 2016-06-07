@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Remake marks functionality, since it's not in bash env here
+# Find data directory
+marklink=$(find "$MARKPATH" "$MARKPATH/${PRJ}-${PBRANCH}" -maxdepth 1 -type l -print | grep "data" | head -1);
+marklink=$(readlink $marklink)
+
+echo Running prophet-sql-restore prophet ${marklink}/dev-trunk-goldendb-daily-latest.dump
+prophet-sql-restore prophet ${marklink}/dev-trunk-goldendb-daily-latest.dump
