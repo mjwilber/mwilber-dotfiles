@@ -1,3 +1,6 @@
 [submodule "liquidprompt"]
 	path = liquidprompt
 	url = https://github.com/nojhan/liquidprompt.git
+[submodule "git-radar"]
+	path = git-radar
+	url = https://github.com/michaeldfallen/git-radar
