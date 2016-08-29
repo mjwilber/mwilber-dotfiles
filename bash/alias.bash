@@ -32,6 +32,7 @@ alias whence='type -a'
 alias bc='bc -l'
 
 # Simplify just getting the date in YYYY-mm-dd (%F) format
+alias now='date +%T'
 alias dt='date +%F'
 
 # # Alias out some shell/process status items
@@ -48,10 +49,15 @@ alias celar='clear'
 alias claer='clear'
 alias cealr='clear'
 alias cls='clear'
+alias c='clear'
 #
 # # Alias out some navigational commands
 alias ..='cd ..'
 alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias .4='cd ../../../..'
+alias .5='cd ../../../../..'
 
 # #####################################################################
 alias home="pushd ${HOME}"
@@ -75,3 +81,6 @@ alias liq='source $DOTFILES/liquidprompt/liquidprompt; [[ -n "${PRJ_NAME:-$PRJ}"
 
 # Dev tools
 alias gw="./gradlew"
+
+# Network
+alias ports='netstat -tulanp'
