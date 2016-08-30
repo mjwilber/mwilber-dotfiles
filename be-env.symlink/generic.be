@@ -8,10 +8,16 @@ echo "(generic.be) $*"
 
 export PRJ
 #export PRJ_NAME=<use to override liquid prompt display name
-export PBRANCH=${1:-trunk}
+export PBRANCH=${1:-develop}
 
 # Setup the new project
 export PRJ_HOME=~/projects/$PRJ/${PBRANCH}
+if [ ! -d ${PRJ_HOME} ]; then
+    export PRJ_HOME=~/projects/$PRJ
+    if [ ! -d ${PRJ_HOME} ]; then
+        echo "NO project home found!!!!"
+    fi
+fi
 
 if [ -e "$PRJ_HOME/user.properties" ]; then
 
