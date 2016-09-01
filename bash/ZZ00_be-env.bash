@@ -101,10 +101,10 @@ function saveWork() {
 }
 
 
-echo " - $PRJ"
+echo " - $PRJ ---- $PRJ_ENV"
 source "$PRJ_ENV" "${PRBRANCH:-trunk}"
 
-PROPHET_BE_ENV=$(dirname $PRJ_ENV)
-[ -d $PROPHET_BE_ENV ] && [[ ":$PATH:" != *":$PROPHET_BE_ENV:"* ]] && export PATH="$PROPHET_BE_ENV:$PATH"
+PRJ_ENV_HOME=$(dirname $PRJ_ENV)
+[ -d $PRJ_ENV_HOME ] && [[ ":$PATH:" != *":$PRJ_ENV_HOME:"* ]] && export PATH="$PRJ_ENV_HOME:$PATH"
 
 [[ -n "$LP_OS" ]] && type -t prompt_tag && prompt_tag $PRJ
