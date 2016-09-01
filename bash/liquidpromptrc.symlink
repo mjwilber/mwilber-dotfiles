@@ -1,4 +1,6 @@
 
+echo "(~/.liquidpromptrc)"
+
 ####################################
 # LIQUID PROMPT CONFIGURATION FILE #
 ####################################
@@ -6,14 +8,17 @@
 # If you want to use different themes and features,
 # you can load the corresponding files here:
 #source ~/.config/liquidprompt/nojhan.theme
-#LP_PS1_FILE=~/.config/liquidprompt/nojhan.ps1
+[[ -r $DOTFILES/bash/prompt.liquid.ps1 ]] && LP_PS1_FILE=$DOTFILES/bash/prompt.liquid.ps1
 
 #############
 # BEHAVIOUR #
 #############
 
+LP_PS1_PREFIX="\n"
+
 # Maximal value under which the battery level is displayed
 # Recommended value is 75
+LP_ENABLE_BATT=0
 LP_BATTERY_THRESHOLD=75
 
 # Minimal value after which the load average is displayed
@@ -35,7 +40,8 @@ LP_PATH_KEEP=2
 # Do you want to display the hostname, even if not connected through network?
 # Defaults to 0 (do not display hostname when locally connected)
 # set to 1 if you want to always see the hostname
-LP_HOSTNAME_ALWAYS=0
+LP_HOSTNAME_ALWAYS=1
+LP_COLOR_HOST=$YELLOW
 
 # Do you want to display the user, even if the user is the same as the one logged in?
 # Defaults to 1 (always display the user)
@@ -74,6 +80,7 @@ LP_ENABLE_BATT=0
 # Do you want to use VCS features with the root account?
 # Recommended value is 0
 LP_ENABLE_VCS_ROOT=0
+LP_COLOR_CHANGES=$BOLD_RED
 
 # Do you want to use the Git special features?
 # Recommended value is 1
@@ -81,7 +88,7 @@ LP_ENABLE_GIT=1
 
 # Do you want to use the Subversion special features?
 # Recommended value is 1
-LP_ENABLE_SVN=1
+LP_ENABLE_SVN=0
 
 # Do you want to use the Mercurial special features?
 # Recommended value is 1
@@ -98,6 +105,7 @@ LP_ENABLE_BZR=0
 # Show time of the last prompt display
 # Recommended value is 0
 LP_ENABLE_TIME=1
+LP_COLOR_TIME=${BLUE}
 
 # Show runtime of the last command if over LP_RUNTIME_THRESHOLD
 # Recommended value is 0
@@ -143,4 +151,10 @@ LP_ENABLE_SSH_COLORS=0
 # will be disabled
 LP_DISABLED_VCS_PATH=""
 
+# Local editions: see prompt.liquid.ps1
+LP_ENABLE_PROJ_SPEC=1
+
+# TODO: Required a code change to liquid prompt for the POSTFIX
+LP_PS1_POSTFIX="> "
+LP_MARK_PREFIX=" [\!]"
 # vim: set et sts=4 sw=4 tw=120 ft=sh:

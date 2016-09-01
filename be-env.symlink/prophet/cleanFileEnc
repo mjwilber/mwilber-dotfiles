@@ -1,0 +1,24 @@
+#!/bin/bash
+
+usage() {
+  echo "Usage $(basename ${0}): [-f <fromEncoding:ISO-8859-15> <file(s)>"
+}
+
+fromEncoding=ISO-8859-15
+while getopts ":f:" opt; do 
+  case "${opt}" in
+    f) fromEncoding=$OPTARG;;
+    *)
+      echo "Invalid option -$OPTARG"; usage; exit 1;;
+  esac
+done
+shift $((OPTIND-1))
+
+echo "fromEncoding: ${fromEncoding}"
+for f in $@; do
+    echo "<<<<<<<<<<<<<<<<< $f"
+    tmp=$(mktemp)
+    iconv -f $fromEncoding $f > $tmp
+    mv $tmp $f
+    dos2unix -q $f
+done

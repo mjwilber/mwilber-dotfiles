@@ -11,12 +11,13 @@ export PRJ
 export PBRANCH=${1:-develop}
 
 # Setup the new project
-if [ -d "~/projects/$PRJ/${PBRANCH}" ]; then
-    export PRJ_HOME=~/projects/$PRJ/${PBRANCH}
-else
+export PRJ_HOME=~/projects/$PRJ/${PBRANCH}
+if [ ! -d ${PRJ_HOME} ]; then
     export PRJ_HOME=~/projects/$PRJ
+    if [ ! -d ${PRJ_HOME} ]; then
+        echo "NO project home found!!!!"
+    fi
 fi
-
 
 if [ -e "$PRJ_HOME/user.properties" ]; then
 

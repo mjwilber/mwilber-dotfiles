@@ -2,7 +2,17 @@
 # Some ideas from http://java.dzone.com/articles/cool-interesting-useful-unique
 # 
 echo "(promptrc.bash)"
+
+
+function proj_spec(){
+	echo -n ${PRJ:--}\(${PBRANCH:--}\);
+}
+
 export PS1='\n${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h \[\e[1;36m\]\A \[\033[01;34m\]\w [\#]\$>\[\033[00m\] '
+export PROMPT_COMMAND='printf "\033]0;%s@%s[%s(%s)]:%s\033\\" "${USER}" "${HOSTNAME%%.*}" "${PRJ:--}" "${PBRANCH:--}" "${PWD/#$HOME/~}"'
+
+[[ $- = *i* ]] && source ~/.dotfiles/liquidprompt/liquidprompt
+
 #export PS1="\n\u@\h \t \w[\#]\$> "
 #export PS1="\`if [ \$? = 0 ]; then echo \e[33\;40m\\\^\\\_\\\^\e[0m; else echo \e[36\;40m\\\-\e[0m\\\_\e[36\;40m\\\-\e[0m; fi\` \[\033[38m\]\u \[\033[0;36m\]\j \[\033[1;32m\]\!\[\033[01;34m\] \w \[\033[31m\]\`ruby -e \"print (%x{git branch 2> /dev/null}.split(%q{\n}).grep(/^\*/).first || '').gsub(/^\* (.+)$/, '(\1) ')\"\`\[\033[37m\]$\[\033[00m\] "
 #export PS1="\[\033[0;34m\][\[\e[0;36m\]$(date +%H:%M)\[\033[0;34m\]]\[\033[0;34m\][\[\033[0;32m\]\u\[\033[1;38m\]@\[\e[0;36m\]\h:\[\033[0;34m\]\w\[\033[0;32m\]$(parse_git_branch)\[\033[0;34m\]]\[\033[0;32m\]\n$ "
@@ -169,3 +179,51 @@ export PS1='\n${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h \[\e[1;36m\
 # 
 # PS2="\[${yellow}\]→ \[${reset}\]";
 # export PS2;
+
+
+# #  Colors
+# #
+# RED="\[\e[1;31m\]"
+# BLUEGREEN="\[\e[0;34m\]"
+# GREEN="\[\e[01;32m\]"
+# BLUE="\[\e[01;34m\]"
+# SEAGREEN_BOLD="\[\e[1;36m\]"
+# ColorOff="\[\e[0m\]"			# Text Reset
+# 
+# CWD_COLOR=$GREEN
+# CMD_COLOR=$BLUE
+# LOCATION_COLOR=$GREEN
+# 
+# # Set the title and the prompt for an interactive shell
+# if [ "$PS1" ]; then
+#   #debug echo "In PS1 = $TERM"
+#     case $TERM in
+#     xterm*)
+#         if [ -e /etc/sysconfig/bash-prompt-xterm ]; then
+#             PROMPT_COMMAND=/etc/sysconfig/bash-prompt-xterm
+#         else
+#             PROMPT_COMMAND='printf "\033]0;%s@%s[%s(%s)]:%s\007" "${USER}" "${HOSTNAME%%.*}" "${PRJ:--}" "${PBRANCH:--}" "${PWD/#$HOME/~}"'
+#         fi
+#         # PS1="\n${CWD_COLOR}\u@\h:\w${ColorOff}\n[\t][\$(proj_spec)] [\#]\$> "
+#         PS1="\n${LOCATION_COLOR}\u@\h:\w\n${CMD_COLOR}[\$(proj_spec)] \D{%l:%M%P} [\#]\$>${ColorOff} "
+#         ;;
+#     screen)
+#         if [ -e /etc/sysconfig/bash-prompt-screen ]; then
+#             PROMPT_COMMAND=/etc/sysconfig/bash-prompt-screen
+#         else
+#             PROMPT_COMMAND='printf "\033]0;%s@%s[%s(%s)]:%s\033\\" "${USER}" "${HOSTNAME%%.*}" "${PRJ:--}" "${PBRANCH:--}" "${PWD/#$HOME/~}";history -a'
+#         fi
+#         PS1="\n${CWD_COLOR}\u@\h:\w${ColorOff}\n[\t][\$(proj_spec)] [\#]\$> "
+#         ;;
+#     dumb)
+#         PS1="[\#]\$> "
+#         ;;
+#     *)
+#         [ -e /etc/sysconfig/bash-prompt-default ] && PROMPT_COMMAND=/etc/sysconfig/bash-prompt-default
+#         PS1="\n${CWD_COLOR}\u@\h:\w${ColorOff}\n[\t][\$(proj_spec)] [\#]\$> "
+#         ;;
+#     esac
+# fi
+# 
+# 
+# 
