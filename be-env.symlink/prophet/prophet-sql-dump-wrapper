@@ -14,7 +14,7 @@ mkdir -p ${dev_trunk_golden_dump_dir}
 # find ${dev_trunk_golden_dump_dir} -mtime +20 -exec rm {} \;
 
 # To let the authorization be automated put the password in ~/.pgpass
-~mwilber/.dotfiles/bin/prophet-sql-dump dev-trunk-goldendb "${dump_file}"
+~mwilber/.be-env/prophet/prophet-sql-dump dev-trunk-goldendb "${dump_file}"
 
 rm -f "${link_file}"
 ln -s "${dump_file}" "${link_file}"
