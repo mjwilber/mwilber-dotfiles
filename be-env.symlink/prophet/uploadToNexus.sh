@@ -46,8 +46,19 @@ for f in $*; do
   elif [ ${f: -4} != ".md5" ] && [ ${f: -5} != ".sha1" ]; then
     echo "<<<<<<<<<<<<<<<<<<<<<< Processing: $f"
     echo "---- Generating checksum files:"
-    md5sum $f | awk '{print $1}' > ${f}.md5
-    sha1sum $f | awk '{print $1}' > ${f}.sha1
+    if [ -e "${f}.md5" ]; then
+        echo "Skip generating md5 checksum as the file exists"
+    else
+        md5sum $f | awk '{print $1}' > ${f}.md5
+        echo "Skip generating md5 checksum as the file exists"
+    fi
+    if [ -e "${f}.sha1" ]; then
+        echo "Skip generating sha1 checksum as the file exists"
+    else
+        sha1sum $f | awk '{print $1}' > ${f}.sha1
+        echo "Skip generating sha1 checksum as the file exists"
+    fi
+
     
     echo "---- Uploading: $f, ${f}.md5, ${f}.sha1"
     u $f $component $url
