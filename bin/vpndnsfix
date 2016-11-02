@@ -2,6 +2,6 @@
 
 # Ily found this link: http://notesonit.blogspot.com/2016/02/sonicwall-netextender-on-ubuntu.html
 
-sudo rm resolv.conf 
-sudo ln -s /run/resolvconf/resolv.conf resolv.conf 
+sudo rm /etc/resolv.conf 
+sudo ln -s /run/resolvconf/resolv.conf /etc/resolv.conf 
 sudo resolvconf -u
