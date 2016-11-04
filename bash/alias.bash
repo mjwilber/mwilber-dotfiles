@@ -2,6 +2,9 @@
 
 for func_source in $BASH_CONFIG/functions/*; do  source $func_source; done
 
+alias start-ssh-agent='eval "$(ssh-agent -s)"'
+alias ssh-add-baxter='ssh-add ~/.ssh/bybaxter/id_rsa'
+
 #SVN I use a wrapper for it to do some nice terminal and formatting items
 alias svn=svn-wrap.sh
 
