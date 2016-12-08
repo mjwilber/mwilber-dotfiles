@@ -36,23 +36,34 @@ mark -p patch $PRJ_HOME/var/databases/export/patch
 mark data ~/projects/prophet-data
 
 function loaddbprops() {
-    pfile="$PRJ_HOME/etc/prophet/$USER.properties" 
-    echo $pfile
-    if [ ! -e $pfile ]
-    then
-       echo "Unable to determine environment: Cannot find [$pfile]";
-       return 1;
+    # Check to see if we are in a prophet environment
+    if [ ! -e "$PRJ_HOME" ]; then
+        echo "Unable to determine environment: Cannot find [$pfile]";
+        return 1;
     fi
+
     # Pull properties from the environement files
-    tmpSrcfile=`mktemp`
+    local tmpSrcfile=`mktemp`
     #debug echo $tmpSrcfile
-    grep -e "^database" "$PRJ_HOME/etc/prophet/$USER.properties"  | sed 's/^/export /' | sed 's/\./_/g' > $tmpSrcfile
-    [ -e $PRJ_HOME/etc/prophet/$(hostname).properties ] && grep -e "^database" "$PRJ_HOME/etc/prophet/$(hostname).properties"  | sed 's/^/export /' | sed 's/\./_/g' >> $tmpSrcfile
+    
+    # Files relative to $PRJ_HOME
+    local pfiles=("etc/prophet/$USER.properties" "etc/prophet/$(hostname).properties" "etc-template/prophet/$USER.properties" "etc-template/prophet/$(hostname).properties")
+    for pf in "${pfiles[@]}"; do
+        # echo "$pf"
+        f="$PRJ_HOME/$pf"
+        if [ -e "$f" ]; then
+            echo "--- Reading: $f"
+            grep -e "^database" "$f" | sed 's/^/export /' | sed 's/\./_/g' >> $tmpSrcfile
+        # else
+        #     echo "Not Found: $f"
+        fi
+    done
+
     unset database_username database_host database_name database_test_username database_test_host database_test_name
-    echo "Catting $tmpSrcfile"
+    #debug echo "Catting $tmpSrcfile"
     cat $tmpSrcfile
     . $tmpSrcfile
-    rm $tmpSrcfile
+    rm $tmpSrcfile > /dev/null
 }
 
 # Open a psql prompt to the current database

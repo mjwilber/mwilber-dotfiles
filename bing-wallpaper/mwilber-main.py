@@ -301,7 +301,7 @@ def main():
             urlretrieve(image_url, image_path)
 #mwilber            change_background(image_path)
 #mwilber            change_screensaver(image_path)
-            summary = 'Bing Wallpaper updated successfully'
+            summary = 'Bing Wallpaper updated successfully: %s' % image_path
             body = image_metadata.find("copyright").text.encode('utf-8')
             imageUrl = image_metadata.find("url").text.encode('utf-8')
 
@@ -309,7 +309,7 @@ def main():
             with open(download_path + "/image-details.txt", "a+") as myfile:
                 myfile.write(text)
         else:
-            summary = 'Bing Wallpaper unchanged'
+            summary = 'Bing Wallpaper unchanged %s' % image_path
             body = ('%s already exists in Wallpaper directory' %
                     image_metadata.find("copyright").text.encode('utf-8'))
         check_limit()
