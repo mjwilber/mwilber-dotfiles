@@ -21,10 +21,12 @@ for possibleVer in $@ $DEFAULT_JDK; do
         tmp_java_home=/usr/lib/jvm/jdk1.7.0_55 ;;
 
       1.8.0_60 | 1.8 | 8)
-        if [ -d /usr/lib/jvm/jdk1.8.0_60 ]; then
-          tmp_java_home=/usr/lib/jvm/jdk1.8.0_60 
+        if [ -d /usr/lib/jvm/jdk1.8.0_111 ]; then
+          tmp_java_home=/usr/lib/jvm/jdk1.8.0_111
         elif [ -d /usr/lib/jvm/jdk1.8.0_77 ]; then
           tmp_java_home=/usr/lib/jvm/jdk1.8.0_77
+        elif [ -d /usr/lib/jvm/jdk1.8.0_60 ]; then
+          tmp_java_home=/usr/lib/jvm/jdk1.8.0_60 
         fi
         ;;
     esac

@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import datetime
 import locale
 import os
 import re
@@ -163,7 +164,7 @@ def get_download_path():
     try:
         config = ConfigParser()
         config.read(get_config_file())
-        path = config.get('directory', 'dir_path')
+        path = '{0}/{1}'.format(config.get('directory', 'dir_path'), datetime.datetime.now().year)
 
         return path or default_path
     except Exception:
@@ -295,6 +296,7 @@ def main():
 
         download_path = get_download_path()
         init_dir(download_path)
+        print "Downloading {0}/{1}".format(download_path, image_name)
         image_path = os.path.join(download_path, image_name)
 
         if not os.path.isfile(image_path):
