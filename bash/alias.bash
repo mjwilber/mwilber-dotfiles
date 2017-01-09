@@ -84,6 +84,7 @@ alias liq='source $DOTFILES/liquidprompt/liquidprompt; [[ -n "${PRJ_NAME:-$PRJ}"
 
 # Dev tools
 alias gw="./gradlew"
+alias g="git"
 
 # Network
 alias ports='netstat -tulanp'
