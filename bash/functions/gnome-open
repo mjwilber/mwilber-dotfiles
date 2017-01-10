@@ -1,8 +1,0 @@
-
-function o() {
-	if [ $# -eq 0 ]; then
-		gnome-open .;
-	else
-		gnome-open "$@";
-	fi;
-}

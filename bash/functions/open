@@ -1,0 +1,9 @@
+
+function o() {
+    local toOpen="$@"
+	if [ $# -eq 0 ]; then
+		toOpen=.
+	fi;
+
+    xdg-open $toOpen
+}
