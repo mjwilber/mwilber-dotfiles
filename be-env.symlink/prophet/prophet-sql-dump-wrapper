@@ -1,20 +1,26 @@
 #!/bin/bash
 # A script to call ..../prophet-sql-dump by crontab to dump dev-trunk-goldendb in the early mornings.
 
-# According to TeamCity: dev-trunk-goldendb is triggered at 23:10 (CST) daily
+dbs_to_dump="dev-trunk-goldendb"
+# dbs_to_dump="dev-trunk-goldendb dev-trunk-tomcatdb"
+for db in $dbs_to_dump; do
+    echo $db
 
-dev_trunk_golden_dump_dir=/home/mwilber/projects/prophet-data/dev-trunk-goldendb-daily
-dump_file="${dev_trunk_golden_dump_dir}/dev-trunk-goldendb-$(date +\%Y\%m\%d-\%H\%M).dump"
-link_file="$(dirname $(dirname $dump_file))/dev-trunk-goldendb-daily-latest.dump"
+    # According to TeamCity: dev-trunk-goldendb is triggered at 23:10 (CST) daily
+    dump_dir=/home/mwilber/projects/prophet-data/${db}-daily
+    dump_file="${dump_dir}/${db}-$(date +\%Y\%m\%d-\%H\%M).dump"
+    link_file="$(dirname $(dirname $dump_file))/${db}-daily-latest.dump"
 
-# Make sure the directory exists
-mkdir -p ${dev_trunk_golden_dump_dir}
+    # Make sure the directory exists
+    mkdir -p ${dump_dir}
 
-# Clean out older files
-# find ${dev_trunk_golden_dump_dir} -mtime +20 -exec rm {} \;
+    # Clean out older files
+    # find ${dev_trunk_golden_dump_dir} -mtime +20 -exec rm {} \;
 
-# To let the authorization be automated put the password in ~/.pgpass
-~mwilber/.be-env/prophet/prophet-sql-dump dev-trunk-goldendb "${dump_file}"
+    # To let the authorization be automated put the password in ~/.pgpass
+    ~mwilber/.be-env/prophet/prophet-sql-dump ${db} "${dump_file}"
 
-rm -f "${link_file}"
-ln -s "${dump_file}" "${link_file}"
+    rm -f "${link_file}"
+    ln -s "${dump_file}" "${link_file}"
+done
+

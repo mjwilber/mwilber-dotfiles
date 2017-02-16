@@ -9,3 +9,6 @@ freemarker=.ftl
 
 --type-set
 properties=.properties
+
+--type-set
+gradle=.gradle
