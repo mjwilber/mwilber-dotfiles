@@ -1,7 +1,7 @@
 #!/bin/bash
 # A script to call ..../prophet-sql-dump by crontab to dump dev-trunk-goldendb in the early mornings.
 
-dbs_to_dump="dev-trunk-goldendb"
+dbs_to_dump="dev-trunk-goldendb dev-goldendb"
 # dbs_to_dump="dev-trunk-goldendb dev-trunk-tomcatdb"
 for db in $dbs_to_dump; do
     echo $db

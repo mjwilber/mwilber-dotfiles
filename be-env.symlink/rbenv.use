@@ -1,0 +1,12 @@
+echo -n "(rbenv.use) $* => "
+
+DEFAULT_JDK=8
+
+if [ ! -d ~/.rbenv/bin ]; then
+    echo "No rbenv installed: https://github.com/rbenv/rbenv"
+    exit 1;
+fi
+
+export PATH="~/.rbenv/bin:$PATH"
+
+eval "$(~/.rbenv/bin/rbenv init -)"
