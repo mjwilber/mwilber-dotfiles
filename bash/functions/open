@@ -5,5 +5,5 @@ function o() {
 		toOpen=.
 	fi;
 
-    xdg-open $toOpen
+    xdg-open "$toOpen"
 }
