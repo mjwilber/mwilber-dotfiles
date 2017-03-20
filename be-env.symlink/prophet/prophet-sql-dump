@@ -12,6 +12,7 @@ usage()
 	echo
 	echo "   <baseHostName> should be saturn to put a dump from dev-saturndb"
 	echo "          $logFile and email the log to IT when complete."
+    echo "          can also include the name of the db host:dbname"
 	echo
 	exit 1;
 }
@@ -22,15 +23,24 @@ usage()
 if [ $# -lt 1 ]; then
 	echo "At least a database host needs to be specified (i.e. neptune -> dev-neptunedb)"
 	usage
-elif [[ $1 = dev*db ]] || [[ $1 = tgt*db ]] || [[ $1 = stable*db ]]; then
-  #debug echo "Using straight up host name"
-  dbHost=$1
+fi
+
+# Handle host:dbname pattern (default dbname to prophet if none specified)
+dbhost=${1%:*}
+dbname=${1#*:}
+if [ "$dbname" -eq "$dbhost" ]; then
+    dbname=prophet
+fi
+echo "<$dbhost>:<$dbname>"
+if [[ $dbhost = dev*db ]] || [[ $dbhost = tgt*db ]] || [[ $dbhost = stable*db ]]; then
+  echo "Using straight up host name"
+  # dbHost=$1
 else
-  dbHost=dev-$1db
+  dbhost=dev-${dbhost}db
 fi
 
 #destinationDir=$dbHost
-destinationFile=${2:-${dbHost}_`date +%F`_prophet.dump}
+destinationFile=${2:-${dbhost}_${dbname}_`date +%F`.dump}
 
 if [ -r $destinationFile ]; then
 	echo "WARN: $destinationFile already exists. It will be overwritten!"
@@ -43,8 +53,8 @@ fi
 #pushd $destinationDir > /dev/null
 #debug echo PWD=`pwd`
 
-echo "Beginning dump from '$dbHost'"
-echo "pg_dump -v -F c -U prophet -h $dbHost prophet > $destinationFile"
-pg_dump -v -F c -U prophet -h $dbHost prophet > $destinationFile
+echo "Beginning dump of '$dbname' from '$dbhost'"
+echo "pg_dump -v -F c -U prophet -h $dbhost $dbname > $destinationFile"
+pg_dump -v -F c -U prophet -h $dbhost $dbname > $destinationFile
 
-echo "COMPLETED: Dump of ${dbHost} to ${destinationFile}"
+echo "COMPLETED: Dump of ${dbhost}:${dbname} to ${destinationFile}"
