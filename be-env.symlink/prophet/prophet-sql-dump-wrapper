@@ -1,15 +1,15 @@
 #!/bin/bash
 # A script to call ..../prophet-sql-dump by crontab to dump dev-trunk-goldendb in the early mornings.
-
-dbs_to_dump="dev-trunk-goldendb:prophet_bps dev-goldendb dev-tomcat-goldendb:prophet_bps"
+dbs_to_dump="dev-tomcat-goldendb:prophet_bps"
+#dbs_to_dump="dev-trunk-goldendb:prophet dev-goldendb dev-tomcat-goldendb:prophet_bps"
 # dbs_to_dump="dev-trunk-goldendb dev-trunk-tomcatdb"
 for db in $dbs_to_dump; do
     echo $db
 
     # According to TeamCity: dev-trunk-goldendb is triggered at 23:10 (CST) daily
-    dump_dir=/home/mwilber/projects/prophet-data/${db/:/_/}-daily
-    dump_file="${dump_dir}/${db/:/_/}-$(date +\%Y\%m\%d-\%H\%M).dump"
-    link_file="$(dirname $(dirname $dump_file))/${db}-daily-latest.dump"
+    dump_dir=/home/mwilber/projects/prophet-data/${db/:/_}-daily
+    dump_file="${dump_dir}/${db/:/_}-$(date +\%Y\%m\%d-\%H\%M).dump"
+    link_file="$(dirname $(dirname $dump_file))/${db/:/_}-daily-latest.dump"
 
     # Make sure the directory exists
     mkdir -p ${dump_dir}

@@ -8,11 +8,11 @@ usage()
     echo
 	echo "Copy an existing data dump locally"
 	echo
-	echo "Usage: $self <baseHostName>"
-	echo
-	echo "   <baseHostName> should be saturn to put a dump from dev-saturndb"
-	echo "          $logFile and email the log to IT when complete."
-    echo "          can also include the name of the db host:dbname"
+	echo "Usage: $self <host>[:<dbname>] [destinationFile]"
+    echo "  host must be specified"
+    echo "  dbname can be added if it is not 'prophet'  dev-trunk-golden:prophet_bps"
+    echo "  destinationFile defaults to <host>_<dbname>_<date>.dump if not specified"
+    echo 
 	echo
 	exit 1;
 }
@@ -31,13 +31,13 @@ dbname=${1#*:}
 if [ "$dbname" -eq "$dbhost" ]; then
     dbname=prophet
 fi
-echo "<$dbhost>:<$dbname>"
-if [[ $dbhost = dev*db ]] || [[ $dbhost = tgt*db ]] || [[ $dbhost = stable*db ]]; then
-  echo "Using straight up host name"
-  # dbHost=$1
-else
-  dbhost=dev-${dbhost}db
-fi
+#
+# echo "<$dbhost>:<$dbname>"
+# if [[ $dbhost != dev*db ]] && [[ $dbhost != tgt*db ]] && [[ $dbhost != stable*db ]]; then
+#   dbhost=dev-${dbhost}db
+# else
+#   echo "Using straight up host name"
+# fi
 
 #destinationDir=$dbHost
 destinationFile=${2:-${dbhost}_${dbname}_`date +%F`.dump}
