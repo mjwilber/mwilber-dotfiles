@@ -1,10 +1,10 @@
 #!/bin/bash
 # A script to call ..../prophet-sql-dump by crontab to dump dev-trunk-goldendb in the early mornings.
-dbs_to_dump="dev-tomcat-goldendb:prophet_bps"
-#dbs_to_dump="dev-trunk-goldendb:prophet dev-goldendb dev-tomcat-goldendb:prophet_bps"
+# dbs_to_dump="dev-tomcat-goldendb:prophet_bps"
+dbs_to_dump="dev-trunk-goldendb:prophet dev-tomcat-goldendb:prophet_bps"
 # dbs_to_dump="dev-trunk-goldendb dev-trunk-tomcatdb"
 for db in $dbs_to_dump; do
-    echo $db
+    echo "-#-#-#-#-#-#-#-#-# $db #-#-#-#-#-#-#-#-#-#-"
 
     # According to TeamCity: dev-trunk-goldendb is triggered at 23:10 (CST) daily
     dump_dir=/home/mwilber/projects/prophet-data/${db/:/_}-daily
@@ -20,7 +20,10 @@ for db in $dbs_to_dump; do
     # To let the authorization be automated put the password in ~/.pgpass
     ~mwilber/.be-env/prophet/prophet-sql-dump ${db} "${dump_file}"
 
-    rm -f "${link_file}"
-    ln -s "${dump_file}" "${link_file}"
+    if [ $? -eq 0 ] && [ -e "${link_file}" ] && [ ! -s "${link_file}" ]; then
+        echo "Update link - ${link_file}"
+        rm -f "${link_file}"
+        ln -s "${dump_file}" "${link_file}"
+    fi
 done
 
