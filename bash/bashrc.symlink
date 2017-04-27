@@ -11,6 +11,8 @@ if [ -n "$PS1" ]; then # Run the rest only for interactive shells
 
     shopt -s cdspell	# Changing directories ignores spmall typos
 
+    set -o vi #Make vi commands possible on the command line
+
     # load all bash config files
     [ -d $BASH_CONFIG ] && for bash_config in $BASH_CONFIG/*.bash; do  source $bash_config; done
 
