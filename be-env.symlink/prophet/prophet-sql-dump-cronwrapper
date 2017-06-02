@@ -20,10 +20,12 @@ for db in $dbs_to_dump; do
     # To let the authorization be automated put the password in ~/.pgpass
     ~mwilber/.be-env/prophet/prophet-sql-dump ${db} "${dump_file}"
 
-    if [ $? -eq 0 ] && [ -e "${link_file}" ] && [ ! -s "${link_file}" ]; then
+    if [ $? -eq 0 ] && [ -s "${dump_file}" ]; then
         echo "Update link - ${link_file}"
         rm -f "${link_file}"
         ln -s "${dump_file}" "${link_file}"
+    else
+        echo "Link not updated based on failed sql dump"
     fi
 done
 

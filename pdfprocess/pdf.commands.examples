@@ -1,0 +1,2 @@
+  pdftk 2nd.pdf cat 1-2left output Parkside_Lending_Statement.pdf
+  pdftk 2nd.pdf cat 3-4left output Amazon_Chase_Statement.pdf

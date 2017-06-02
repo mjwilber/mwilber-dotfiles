@@ -26,6 +26,10 @@ set expandtab           " use spaces for tabs
 set softtabstop=4       " 4 spaces in tab when editing
 set shiftwidth=4
 set modelines=1
+set listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<
+" 7.4.710 - http://stackoverflow.com/questions/1675688/make-vim-show-all-white-spaces-as-a-character
+" set listchars=eol:¬,tab:>␣,trail:~,extends:>,precedes:<,space=·
+nnoremap <leader>p :call ToggleShowWhitspace()<CR> " Call funtion below to toggle showing whitespace
 filetype indent on
 filetype plugin on
 set autoindent
@@ -144,6 +148,14 @@ function! ToggleNumber()
         set number
     else
         set relativenumber
+    endif
+endfunc
+
+function! ToggleShowWhitesace()
+    if(&list == 1)
+        set nolist
+    else
+        set list
     endif
 endfunc
 

@@ -1,2 +1,3 @@
 
 set guifont=Monospace\ 9
+set lines=56 columns=132

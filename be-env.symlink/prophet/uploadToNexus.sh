@@ -36,7 +36,8 @@ u() {
     local f=$1
     local component=$2
     local url=$3
-    curl -v -u admin:admin123 --upload-file ${f} $url 2>&1 >> ${component}-$(date +%Y%m%d-%H%M%S)-upload.log
+    echo curl -v -u admin:admin123 --upload-file ${f} $url
+#    curl -v -u admin:admin123 --upload-file ${f} $url 2>&1 >> ${component}-$(date +%Y%m%d-%H%M%S)-upload.log
     [ $? -eq 0 ] && echo "Uploaded ${f} SUCCESSFUL" || echo "Failed uploading ${f}"
 }
 

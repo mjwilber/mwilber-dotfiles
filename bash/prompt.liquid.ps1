@@ -24,6 +24,8 @@
 # LP_BRACKET_OPEN open bracket
 # LP_BRACKET_CLOSE close bracket
 
+LP_ENABLE_TITLE=1
+
 LP_COLOR_PROJ_SPEC=""
 # TODO: Causes bad display characters and repeated prompt
 #LP_COLOR_PROJ_SPEC=${LP_COLOR_PROJ_SPEC:-${YELLOW}}
@@ -63,7 +65,7 @@ LP_PS1="${LP_PS1}${LP_RUNTIME}${LP_ERR}${LP_MARK_PREFIX}${LP_MARK}${LP_PS1_POSTF
 
 # "invisible" parts
 # Get the current prompt on the fly and make it a title
-LP_TITLE="$(_lp_title "${LP_PS1_PREFIX}${LP_JOBS}${LP_BRACKET_OPEN}${LP_USER}${LP_HOST}${LP_PERM}${LP_PWD}${LP_BRACKET_CLOSE}${LP_VENV}${LP_PROXY}${LP_PROJ_SPEC}${LP_VCS}")"
+LP_TITLE="$(_lp_title "${LP_PS1_PREFIX}${LP_JOBS}${LP_PROJ_SPEC}${LP_VCS} ${LP_BRACKET_OPEN}${LP_USER}${LP_HOST}${LP_PERM}${LP_PWD}${LP_BRACKET_CLOSE}${LP_VENV}${LP_PROXY}")"
 
 # Insert it in the prompt
 LP_PS1="${LP_TITLE}${LP_PS1}"
