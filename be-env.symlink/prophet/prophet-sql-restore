@@ -43,23 +43,23 @@ if [ $? != 0 ]; then
 fi
 
 # Drop the prophet_test database, if it exists
-echo "dropdb --if-exists -h ${db_host} -U $db_user ${database_name}_test"
-dropdb --if-exists -h ${db_host} -U $db_user ${database_name}_test
+echo "dropdb --if-exists --host ${db_host} --username $db_user ${database_name}_test"
+dropdb --if-exists --host ${db_host} --username $db_user ${database_name}_test
 if [ $? != 0 ]; then
   echo ""
   echo "ERROR: .... Dropping failed! Exiting....";
   exit;
 fi
 
-echo "createdb -h ${db_host} -U $db_user $database_name"
-createdb -h ${db_host} -U $db_user $database_name
+echo "createdb --host ${db_host} --username $db_user $database_name"
+createdb --host ${db_host} --username $db_user $database_name
 
 echo ""
 echo "Beginning restore of dump file [$local_dump_file] to database [$database_name]"
-echo "pg_restore -v -h ${db_host} -U $db_user -d $database_name $local_dump_file"
-pg_restore -v -h ${db_host} -U $db_user -d $database_name $local_dump_file
+echo "pg_restore --verbose --host ${db_host} --username $db_user --dbname $database_name $local_dump_file"
+pg_restore --verbose --host ${db_host} --username $db_user --dbname $database_name $local_dump_file
 
 echo ""
 echo "VACUUM database [$database_name]"
-echo "vacuumdb -v -h ${db_host} -U $db_user -d $database_name"
-vacuumdb -v -h ${db_host} -U $db_user -d $database_name
+echo "vacuumdb --verbose --host ${db_host} --username $db_user --dbname $database_name"
+vacuumdb --verbose --host ${db_host} --username $db_user --dbname $database_name

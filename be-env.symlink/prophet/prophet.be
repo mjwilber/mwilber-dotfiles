@@ -35,54 +35,5 @@ mark -p modules $PRJ_HOME/modules
 mark -p patch $PRJ_HOME/var/databases/export/patch
 mark data ~/projects/prophet-data
 
-function loaddbprops() {
-    # Check to see if we are in a prophet environment
-    if [ ! -e "$PRJ_HOME" ]; then
-        echo "Unable to determine environment: Cannot find [$pfile]";
-        return 1;
-    fi
-
-    # Pull properties from the environement files
-    local tmpSrcfile=`mktemp`
-    #debug echo $tmpSrcfile
-    
-    # Files relative to $PRJ_HOME
-    local pfiles=("etc/prophet/$USER.properties" "etc/prophet/$(hostname).properties" "etc-template/prophet/$USER.properties" "etc-template/prophet/$(hostname).properties")
-    for pf in "${pfiles[@]}"; do
-        # echo "$pf"
-        f="$PRJ_HOME/$pf"
-        if [ -e "$f" ]; then
-            echo "--- Reading: $f"
-            grep -e "^database" "$f" | sed 's/^/export /' | sed 's/\./_/g' >> $tmpSrcfile
-        # else
-        #     echo "Not Found: $f"
-        fi
-    done
-
-    unset database_username database_host database_name database_test_username database_test_host database_test_name
-    #debug echo "Catting $tmpSrcfile"
-    cat $tmpSrcfile
-    . $tmpSrcfile
-    rm $tmpSrcfile > /dev/null
-}
-
-# Open a psql prompt to the current database
-function sql() {
-    loaddbprops
-    echo "psql -U ${database_username:-prophet} -h ${database_host:-localhost} -d ${database_name:-prophet} $@"
-    psql -U ${database_username:-prophet} -h ${database_host:-localhost} -d ${database_name:-prophet} "$@"
-}
-
-# Open a psql prompt to the current test database
-function sqltest() {
-    loaddbprops
-    echo "psql -U ${database_test_username:-${database_username:-prophet}} -h ${database_test_host:-${database_host:-localhost}} -d ${database_test_name:-${database_name:-prophet}_test}"
-    psql -U ${database_test_username:-${database_username:-prophet}} -h ${database_test_host:-${database_host:-localhost}} -d ${database_test_name:-${database_name:-prophet}_test}
-}
-
-function svn13merge() {
-    svn merge $* http://svn.bybaxter.com/repos/prophet/branches/prophet-13.1.0 .
-}
-
 cd $PRJ_HOME;
 pwd

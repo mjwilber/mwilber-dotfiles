@@ -1,0 +1,84 @@
+#!/bin/bash
+#
+# A script to use the prophet environment to be able to connect to the correct database.
+########################################################
+#
+self=$(basename $0)
+
+usage() {
+    [ $# -gt 0 ] && echo "ERROR: $@"
+    cat <<EOF
+Usage: ${self} [-G <gcid>] [-v]
+    -G <gcid> = Use the gcid to lookup tenant specific properties
+    -T        = Use the test database instead (Not Implemented Yet)
+    -v        = Verbose - print debug info
+EOF
+}
+
+# TODO: use a new param -T for the test database
+# Open a psql prompt to the current test database
+#function sqltest() {
+#    loaddbprops
+#    echo "psql -U ${database_test_username:-${database_username:-prophet}} -h ${database_test_host:-${database_host:-localhost}} -d ${database_test_name:-${database_name:-prophet}_test}"
+#    psql -U ${database_test_username:-${database_username:-prophet}} -h ${database_test_host:-${database_host:-localhost}} -d ${database_test_name:-${database_name:-prophet}_test}
+#}
+
+
+gcid=
+loadprop_verbose=
+
+function loaddbprops() {
+    # Check to see if we are in a prophet environment
+    if [ ! -e "$PRJ_HOME" ]; then
+        echo "Unable to determine environment: Cannot find [$pfile]";
+        return 1;
+
+    fi
+
+    local tenant=$(echo ${gcid:-NOTENANT} | awk '{print toupper($0)}')
+    [ $loadprop_verbose ] && echo "TENANT=$tenant"
+
+    # Pull properties from the environement files
+    local tmpSrcfile=`mktemp`
+    
+    # Files relative to $PRJ_HOME
+    local pfiles=( # "etc-template/prophet/$USER.properties"
+                   # "etc-template/prophet/$(hostname).properties"
+                   "etc/prophet.properties"
+                   "etc/prophet/$USER.properties"
+                   "etc/prophet/$(hostname).properties"
+                   "etc/tenants/${tenant}.tenant.properties" )
+    for pf in "${pfiles[@]}"; do
+        # echo "$pf"
+        f="$PRJ_HOME/$pf"
+        if [ -e "$f" ]; then
+            echo "# Read from: $f" >> $tmpSrcfile
+            grep -e "^database" "$f" | sed 's/^/export /' | sed 's/\./_/g' >> $tmpSrcfile
+        # else
+        #     echo "Not Found: $f"
+        fi
+    done
+
+    unset database_username database_host database_name database_test_username database_test_host database_test_name
+    [ $loadprop_verbose ] && cat $tmpSrcfile
+    . $tmpSrcfile
+    rm $tmpSrcfile > /dev/null
+}
+
+# Open a psql prompt to the current database
+while getopts ":G:vT" opt "$@"
+do
+    case $opt in
+    G) gcid=$(echo ${OPTARG} | awk '{print toupper($0)}');;
+    v) loadprop_verbose=true;;
+    T) usage "-T=Test is not implemented yet"; exit 2;;
+    *) usage "Invalid argument: $opt"; exit 1 ;;
+    esac
+done
+shift `expr $OPTIND - 1`
+
+loaddbprops
+echo
+echo "psql -U ${database_username:-prophet} -h ${database_host:-localhost} -d ${database_name:-prophet} $@"
+psql -U ${database_username:-prophet} -h ${database_host:-localhost} -d ${database_name:-prophet} "$@"
+

@@ -55,7 +55,7 @@ fi
 
 echo "Beginning dump of '$dbname' from '$dbhost'"
 echo "pg_dump -v -F c -U prophet -h $dbhost $dbname > $destinationFile"
-pg_dump -v -F c -U prophet -h $dbhost $dbname > $destinationFile
+pg_dump --verbose --format=custom --username prophet --host $dbhost $dbname > $destinationFile
 status=$?
 if [ $status -eq 0 ];then
     echo "COMPLETED: Dump of ${dbhost}:${dbname} to ${destinationFile}"
