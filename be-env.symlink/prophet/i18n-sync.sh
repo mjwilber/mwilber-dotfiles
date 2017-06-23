@@ -12,8 +12,8 @@ if [ $# -lt 2 ]; then
   exit 2;
 fi
 
+# Dump from source database
 
-# Delete old value from target database
 src=$1
 src_host=${src%:*}
 src_database=${src#:}
@@ -32,7 +32,6 @@ shift
 
 
 transfer() {
-  # We've already shifted, so take the next argument
   dest=${1}
   dest_host=${dest%:*}
   dest_database=${dest#:}
@@ -57,6 +56,7 @@ SQL
   cat ${export_i18n_resrc_l10n} | psql -U prophet -h $dest_host -d $dest_database || exit $?
 }
 
+# Cycle through each of the remaining parameters (expecting [host:]database_name
 while [ $# -ne 0 ]; do
   transfer $1
   shift

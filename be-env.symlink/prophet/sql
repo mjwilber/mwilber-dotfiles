@@ -66,11 +66,14 @@ function loaddbprops() {
 }
 
 # Open a psql prompt to the current database
-while getopts ":G:vT" opt "$@"
+while getopts ":G:h:d:U:vT" opt "$@"
 do
     case $opt in
     G) gcid=$(echo ${OPTARG} | awk '{print toupper($0)}');;
     v) loadprop_verbose=true;;
+    h) cmdline_host=${OPTARG};;
+    d) cmdline_database=${OPTARG};;
+    U) cmdline_username=${OPTARG};;
     T) usage "-T=Test is not implemented yet"; exit 2;;
     *) usage "Invalid argument: $opt"; exit 1 ;;
     esac
@@ -78,7 +81,10 @@ done
 shift `expr $OPTIND - 1`
 
 loaddbprops
+dbhost=${cmdline_host:-${database_host:-localhost}}
+dbuser=${cmdline_username:-${database_username:-prophet}}
+dbname=${cmdline_database:-${database_name:-prophet}}
 echo
-echo "psql -U ${database_username:-prophet} -h ${database_host:-localhost} -d ${database_name:-prophet} $@"
-psql -U ${database_username:-prophet} -h ${database_host:-localhost} -d ${database_name:-prophet} "$@"
+echo "psql -U ${dbuser} -h ${dbhost} -d ${dbname} $@"
+psql -U ${dbuser} -h ${dbhost} -d ${dbname} "$@"
 
