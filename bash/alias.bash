@@ -19,6 +19,7 @@ alias mreo='less'
 
 # Alias out some standard shell commands with additional flags
 alias rm='rm -v'
+alias l='ls --color=auto -lFat'
 alias ls='ls --color=auto -Fh'
 alias la='ls --color=auto -ahF'
 alias ll='ls --color=auto -lhF'

@@ -16,7 +16,7 @@ PGHOST=${PGHOST:-$(hostname)} \
   PGDATABASE=${PGDATABASE:-prophet_bps} \
   echo "${PGUSER}@${PGHOST}:/${PGDATABASE}"
 
-psql -U prophet -h oneida -d ${1:-prophet_bps} <<SQL
+psql -U prophet -h macedon -d ${1:-prophet_bps} <<SQL
 DELETE FROM feed_reject;
 DELETE FROM feed_history;
 DELETE FROM feed_file_history;

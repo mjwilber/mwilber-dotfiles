@@ -1,0 +1,12 @@
+
+# No arguments: `git status`
+# With arguments: acts like `git`
+fgvim() {
+  if [[ $# -eq 1 ]]; then
+      echo "If: $*"
+      find . -name ${1} | xargs gvim -p
+  else
+      echo "Else: $*"
+      find $* | xargs gvim -p
+  fi
+}

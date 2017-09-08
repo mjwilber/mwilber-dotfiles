@@ -4,6 +4,22 @@
 BE_HOME=${BE_HOME:-$HOME/.be-env}
 PROJECTS_HOME=${PROJECTS_HOME:-$HOME/projects}
 
+###############  Utilities
+# Echo the description of a desk. $1 is the deskfile.
+echo_description() {
+    local descline=$(grep -E "#\s+Description" "$1")
+    echo "${descline##*Description: }" # This returns the last description in the file
+}
+
+# Return a list of aliases and functions for a given desk
+get_callables() {
+    local DESKPATH=$1
+    grep -E "^(alias |(function )?[a-zA-Z0-9_-]+( )?\()" "$DESKPATH" \
+        | sed 's/alias \([^= ]*\)=.*/\1/' \
+        | sed -E 's/(function )?([a-zA-Z0-9]*)\(\).*/\2/'
+}
+############### End Utilities
+
 be_version() {
     echo "◲  be 2.0"
 }
@@ -134,22 +150,6 @@ be_edit() {
     ${EDITOR:-vi} "$EDIT_PATH" 
 
     # TODO: If just edit current or DESKNAME_TO_EDIT == current
-}
-
-## Utilities
-
-# Echo the description of a desk. $1 is the deskfile.
-echo_description() {
-    local descline=$(grep -E "#\s+Description" "$1")
-    echo "${descline##*Description: }" # This returns the last description in the file
-}
-
-# Return a list of aliases and functions for a given desk
-get_callables() {
-    local DESKPATH=$1
-    grep -E "^(alias |(function )?[a-zA-Z0-9_-]+( )?\()" "$DESKPATH" \
-        | sed 's/alias \([^= ]*\)=.*/\1/' \
-        | sed -E 's/(function )?([a-zA-Z0-9]*)\(\).*/\2/'
 }
 
 
