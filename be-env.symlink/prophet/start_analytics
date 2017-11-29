@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# export PROPHET_ANALYTICS_SERVER_OPTS=-agentlib:jdwp=transport=dt_socket,address=localhost:5005,server=y,suspend=y
+
+/home/mwilber/projects/prophet/gradle/tools/prophet-analytics-server-prophet-ldap.32/bin/prophet-analytics-server \
+  --spring.profiles.active=managed \
+  --prophet.etc=/home/mwilber/projects/prophet/gradle/etc \
+  --spring.config.location=/home/mwilber/projects/prophet/gradle/tools/prophet-analytics-server-prophet-ldap.32/config/ \
+  --cluster.managed-mode=true \
+  --logging.path=/home/mwilber/projects/prophet/gradle/logs \
+  --spring.datasource.host=macedon \
+  --spring.datasource.initialSize=1 \
+  --spring.datasource.password=prophet \
+  --spring.datasource.maxIdle=45 \
+  --spring.datasource.databaseName=blue_tfi \
+  --spring.datasource.port=5432 \
+  --spring.datasource.minIdle=1 \
+  --spring.datasource.username=prophet \
+  --spring.datasource.maxActive=45 \
+  --spring.datasource.maxWait=120000 \
+  --geocoder.host=osrm.bybaxter.com \
+  --geocoder.port=8989 \
+  --travelcalc.host=osrm.bybaxter.com \
+  --travelcalc.port=8080

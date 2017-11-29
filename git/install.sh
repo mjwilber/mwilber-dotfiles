@@ -30,4 +30,16 @@ git config --global alias.grog 'log --graph --abbrev-commit --decorate --all --f
 # git config --global alias.type 'cat-file -t'
 # git config --global alias.dump 'cat-file -p'
 
+# Show all branches (even across remotes)
+git config --global alias.branches 'branch -a --color -v'
+
+# Get short SHA-1 for object
+git config --global alias.hash 'rev-parse HEAD'
+
+# Update all submodules
+git config --global alias.subs 'submodule foreach git pull origin master' # master == develop?
+
+# List all modified files
+git config --global alias.wip 'ls-files -m'
+
 echo "  Done."

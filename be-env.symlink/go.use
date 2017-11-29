@@ -1,0 +1,18 @@
+echo "(go.use) $*"
+
+tmp_go_home=/usr/local/go
+
+RED="\e[1;31m"
+ColorOff="\e[0m"                    # Text Reset
+
+if [ ! -e $tmp_go_home ]; then
+	echo -e "${RED}ERROR: Go Home: $tmp_go_home: does not exist!${ColorOff}" 1>&2 ; 
+	return;
+fi
+
+# Update to new environment
+export GOHOME=$tmp_go_home;
+
+pathmunge $GOHOME/bin before
+
+go version

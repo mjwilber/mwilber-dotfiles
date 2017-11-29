@@ -1,0 +1,30 @@
+-- From https://dzone.com/articles/customizing-my-postgres-shell
+
+-- Turn off command logging while executing the .psqlrc
+\set QUIET 1
+
+-- Show NULLs as an actual character instead of nothing
+\pset null '¤'
+
+-- Update the prompt to include more things
+-- Check out https://www.postgresql.org/docs/9.6/static/app-psql.html#APP-PSQL-PROMPTING for more options
+\set PROMPT1 '%[%033[1m%][%/] # '
+-- SELECT * FROM<enter>. %R shows what type of input it expects.
+\set PROMPT2 '... > '
+
+-- Show all the timings
+\timing
+
+-- Format the records differently
+\x auto
+
+-- http://www.craigkerstiens.com/2013/02/21/more-out-of-psql/
+-- https://robots.thoughtbot.com/an-explained-psqlrc
+-- https://robots.thoughtbot.com/improving-the-command-line-postgres-experience
+\set VERBOSITY verbose
+\set HISTFILE ~/.psql_history- :DBNAME
+\set HISTCONTROL ignoredups
+\set COMP_KEYWORD_CASE upper
+
+-- Turn command logging output back on
+\unset QUIET

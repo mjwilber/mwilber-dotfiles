@@ -7,7 +7,7 @@ echo "(marksrc.bash)"
 # and they look like this:
 
 export MARKPATH=$HOME/.marks
-function go { 
+function gop { 
     [ $# -eq 0 ] && marks && return;
 
     # First check the mark exists - fall through to error message if it doesn't
@@ -18,7 +18,7 @@ function go {
     # If it exists at a project level go there
     [ -e $MARKPATH/${PRJ}-${PBRANCH}/$1 ] && pushd `readlink $MARKPATH/${PRJ}-${PBRANCH}/$1`
 }
-function cdgo { 
+function gocd { 
     [ $# -eq 0 ] && marks && return;
 
     # First check the mark exists - fall through to error message if it doesn't
@@ -104,4 +104,4 @@ _completemarks() {
   return 0
 }
 
-complete -F _completemarks go cdgo unmark
+complete -F _completemarks gop gocd unmark
