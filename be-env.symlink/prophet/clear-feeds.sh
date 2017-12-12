@@ -11,16 +11,17 @@ if git rev-parse --git-dir > /dev/null 2>&1; then
 fi
 
 echo "Clearing the database (feed_reject, feed_history)"
-PGHOST=${PGHOST:-$(hostname)} \
-  PGUSER=${PGUSER:-prophet} \
-  PGDATABASE=${PGDATABASE:-prophet_bps} \
-  echo "${PGUSER}@${PGHOST}:/${PGDATABASE}"
+PGHOST=${PGHOST:-$(hostname)}
+PGUSER=${PGUSER:-prophet}
+PGDATABASE=${PGDATABASE:-$(grep database.name ${PRJ_HOME}/etc/prophet.properties | cut -d= -f2)}
+echo "${PGUSER}@${PGHOST}:/${PGDATABASE}"
 
-psql -U prophet -h macedon -d ${1:-prophet_bps} <<SQL
+psql -U $PGUSER -h $PGHOST -d ${PGDATABASE:-prophet_bps} <<SQL
+-- SELECT COUNT(*) FROM sys_co_prefs;
 DELETE FROM feed_reject;
 DELETE FROM feed_history;
 DELETE FROM feed_file_history;
 SQL
 
 popd
-
+#
