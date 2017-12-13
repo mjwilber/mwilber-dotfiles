@@ -13,7 +13,7 @@ fi
 echo "Clearing the database (feed_reject, feed_history)"
 PGHOST=${PGHOST:-$(hostname)}
 PGUSER=${PGUSER:-prophet}
-PGDATABASE=${PGDATABASE:-$(grep database.name ${PRJ_HOME}/etc/prophet.properties | cut -d= -f2)}
+PGDATABASE=${PGDATABASE:-$(egrep "^database.name=" ${PRJ_HOME}/etc/prophet.properties | cut -d= -f2)}
 echo "${PGUSER}@${PGHOST}:/${PGDATABASE}"
 
 psql -U $PGUSER -h $PGHOST -d ${PGDATABASE:-prophet_bps} <<SQL

@@ -52,5 +52,7 @@ elif [ -d ~/projects/prophet-data ]; then
     mark data ~/projects/prophet-data
 fi
 
+mark -p projectbe ~/.be-env/prophet
+
 cd $PRJ_HOME;
 pwd

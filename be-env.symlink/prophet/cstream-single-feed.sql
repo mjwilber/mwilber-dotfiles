@@ -3,7 +3,7 @@ INSERT INTO feed_process (feed_process_id, name, cid, should_test)
 ON CONFLICT (feed_process_id)  DO NOTHING;
 
 INSERT INTO feed (fid, name, feed_process_id, ftid, required_type, sequence, enabled, last_file_ran, has_control_file)
-  SELECT 19410, 'TST_MATSUPPLY', fp.feed_process_id, 38, 1, 1, 'T', NULL, 'T'
+  SELECT 19410, 'TSTMATSUPPLY', fp.feed_process_id, 38, 1, 1, 'T', NULL, 'T'
    FROM feed_process fp
    WHERE fp.name = 'Carestream_Single'
 ON CONFLICT (fid)
