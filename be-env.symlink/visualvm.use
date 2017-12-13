@@ -1,7 +1,7 @@
 echo -n "(visualvm.use) $* => "
 
 
-version_dir=$(find ~/Tools -maxdepth 1  -type d -name "visualvm_*" | cut -d" " -f 1)
+version_dir=$(find ~/Tools -maxdepth 1  -type d -name "visualvm_*" | head -1 )
 
 RED="\e[1;31m"
 ColorOff="\e[0m"                    # Text Reset
