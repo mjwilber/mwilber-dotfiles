@@ -1,0 +1,21 @@
+echo -n "(visualvm.use) $* => "
+
+
+version_dir=$(find ~/Tools -maxdepth 1  -type d -name "visualvm_*" | cut -d" " -f 1)
+
+RED="\e[1;31m"
+ColorOff="\e[0m"                    # Text Reset
+
+if [ -z "$version_dir" ]; then
+    echo -e "${RED}ERROR: No VisualVM found in ~/Tools${ColorOff}" 1>&2 ; 
+    return;
+fi
+
+if [ -x ${version_dir}/bin/visualvm ]; then
+    echo "Found VisualVM: ${version_dir}"
+else
+    echo "No VisualVM found...."
+    return;
+fi
+
+alias visualvm=${version_dir}/bin/visualvm
