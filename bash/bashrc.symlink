@@ -15,7 +15,7 @@ if [ -n "$PS1" ]; then # Run the rest only for interactive shells
     set -o vi #Make vi commands possible on the command line
 
     # load all bash config files
-    [ -d $BASH_CONFIG ] && for bash_config in $BASH_CONFIG/*.bash; do  source $bash_config; done
+    [ -d $BASH_CONFIG ] && for bash_config in $(ls $BASH_CONFIG/*.bash | sort --ignore-case); do  source $bash_config; done
 
     # Add .dotfiles/bin to path f not in path
     #DEBUG [ -d $DOTFILES/bin ] && [[ ":$PATH:" != *":$DOTFILES/bin:"* ]] && echo "Adding" && export PATH="$DOTFILES/bin:$PATH"

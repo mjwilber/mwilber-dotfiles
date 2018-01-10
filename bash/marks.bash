@@ -42,7 +42,9 @@ function markprint {
 #TODO:Use mark to set absolute directories using a second arg
 #mark [-p] mark_name [directory_to_mark]
 function mark {
-    if [ $# -gt 1 ] && [ "$1" == "-p" ] && [ -z "${PRJ}" ]; then
+    if [ $# -eq 0 ]; then
+        echo "mark [-p] mark_name [direcotry_to_mark:-PWD]"
+    elif [ $# -gt 1 ] && [ "$1" == "-p" ] && [ -z "${PRJ}" ]; then
         echo "No project environment found!!"
     else
       local proj_specific_dir="/"

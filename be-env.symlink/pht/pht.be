@@ -6,9 +6,11 @@ echo "(prophet.be) $*"
 # Variables set: PRJ, PRJ_HOME, ANT_HOME, PATH, JAVA_HOME
 #
 
-export PRJ=prophet
-export PBRANCH=${1:-trunk}
+export PRJ=pht
+# Could the default of this be develop?
+export PBRANCH=${1:-prophet}
 
+[ ! -d "~/projects/$PRJ" ] || echo "Could not find the root project directory ~/projects/$PRJ"
 
 ################################################################
 #         CHANGES prophet to look here for host configuration
@@ -52,7 +54,7 @@ elif [ -d ~/projects/prophet-data ]; then
     mark data ~/projects/prophet-data
 fi
 
-mark -p projectbe ~/.be-env/prophet
+mark -p projectbe ~/.be-env/pht
 
 cd $PRJ_HOME;
 pwd

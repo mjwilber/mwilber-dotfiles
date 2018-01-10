@@ -8,8 +8,10 @@ alias ssh-add-baxter='ssh-add ~/.ssh/bybaxter/id_rsa'
 #SVN I use a wrapper for it to do some nice terminal and formatting items
 alias svn=svn-wrap.sh
 
-# TODO: Conditionally add this if ack not in path
-alias ack=ack-grep
+# Conditionally add an alias for ack if it doesn't exist, but ack-grep does
+if ! which ack > /dev/null; then
+    which ack-grep > /dev/null && alias ack=ack-grep
+fi
 
 # Aliases for pagers
 alias more='less'
@@ -19,11 +21,22 @@ alias mreo='less'
 
 # Alias out some standard shell commands with additional flags
 alias rm='rm -v'
-alias l='ls --color=auto -lFat'
-alias ls='ls --color=auto -Fh'
-alias la='ls --color=auto -ahF'
-alias ll='ls --color=auto -lhF'
-alias lla='ls --color=auto -alhF'
+
+if [ "$(uname)" == "Darwin" ]; then
+    alias l='ls -GlFat'
+    alias ls='ls  -GFh'
+    alias la='ls -GahF'
+    alias ll='ls -GlhF'
+    alias lla='ls -GalhF'
+
+else    
+    alias l='ls --color=auto -lFat'
+    alias ls='ls --color=auto -Fh'
+    alias la='ls --color=auto -ahF'
+    alias ll='ls --color=auto -lhF'
+    alias lla='ls --color=auto -alhF'
+fi
+
 alias dirs='ls -adlhF'
 
 # alias which 'alias | /usr/bin/which --tty-only --read-alias --show-dot --show-tilde'
