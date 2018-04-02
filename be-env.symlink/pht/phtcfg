@@ -1,0 +1,38 @@
+#!/bin/bash
+
+files=
+
+function can_edit_file() {
+    [ -w "$1" ] && echo "$1"
+}
+
+files="$files $(can_edit_file $CONFIG_DIR_HOST/$(hostname).properties)"
+
+if [ -d $PRJ_HOME/etc-template ]; then    # 14.0 +
+    files="$files $(can_edit_file $PRJ_HOME/etc-template/prophet/$USER.properties)"
+elif [ -d $PRJ_HOME/etc ]; then
+    files="$files $(can_edit_file $PRJ_HOME/etc/prophet/$USER.properties)"
+fi
+
+echo "files = $files"
+tmpfile=$(mktemp)
+shasum $files > $tmpfile
+wait $(gvim -p $files)
+
+changes=0
+for f in $files; do
+    # echo "..... $f"
+    cs=$(shasum $f | cut -d' ' -f1)
+    # echo -n    "Looking for shasum $cs: "
+    if ! grep $cs $tmpfile > /dev/null; then
+        echo "$f Changed"
+        changes=1
+    fi
+done
+
+if [ $changes -eq 0 ]; then
+    echo "NO Changes found"
+else
+    echo "Execute $PRJ_HOME/build-config.xml"
+    pushd $PRJ_HOME >> /dev/null; ant -f build-config.xml; popd >> /dev/null
+fi

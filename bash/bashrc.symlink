@@ -9,6 +9,8 @@ if [ -n "$PS1" ]; then # Run the rest only for interactive shells
     # Source global definitions - this usually includes bash completion (which may need enabling)
     [ -f /etc/bashrc ] && echo "/etc/bashrc" && . /etc/bashrc
     [ -f /etc/bash.bashrc ] && echo "/etc/bash.bashrc" && . /etc/bash.bashrc
+    [ -f /etc/bash.bashrc ] && echo "/etc/bash.bashrc" && . /etc/bash.bashrc
+    [ -f /usr/local/etc/bash_completion ] && echo "/usr/local/etc/bash_completion" && . /usr/local/etc/bash_completion 
 
     shopt -s cdspell	# Changing directories ignores spmall typos
 

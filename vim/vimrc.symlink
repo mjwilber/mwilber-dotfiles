@@ -63,6 +63,9 @@ nnoremap j gj
 nnoremap k gk
 nnoremap gV `[v`]       " highlight last inserted text
 " }}}
+" Git Spellcheck on {{{
+autocmd Filetype gitcommit setlocal spell textwidth=72
+" }}}
 " Filetype overrides {{{
 augroup markdown
     " remove previous autocmds

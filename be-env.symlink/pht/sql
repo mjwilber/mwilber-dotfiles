@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # A script to use the prophet environment to be able to connect to the correct database.
 ########################################################
@@ -12,6 +12,7 @@ Usage: ${self} [-G <gcid>] [-v]
     -G <gcid> = Use the gcid to lookup tenant specific properties
     -T        = Use the test database instead (Not Implemented Yet)
     -v        = Verbose - print debug info
+    -n        = No-op, print psql command but do not execute (debug, list environment"
 EOF
 }
 
@@ -26,6 +27,7 @@ EOF
 
 gcid=
 loadprop_verbose=
+no_op=
 
 function loaddbprops() {
     # Check to see if we are in a prophet environment
@@ -64,6 +66,7 @@ function loaddbprops() {
     unset database_username database_host database_name database_test_username database_test_host database_test_name
     [ $loadprop_verbose ] && cat $tmpSrcfile
     . $tmpSrcfile
+    cat $tmpSrcfile
     rm $tmpSrcfile > /dev/null
 }
 
@@ -72,8 +75,9 @@ if [ "$#" != "0" ]; then
     do
         arg="$1"
         case $arg in
-            -G) shift; gcid=$(echo $1 | awk '{print toupper($0)}') ;;
+
             -v) loadprop_verbose=true;;
+            -n) shift; no_op=true;;
             -h) shift; cmdline_host=${1};;
             -d) shift; cmdline_database=${1};;
             -U) shift; cmdline_username=${1};;
@@ -92,5 +96,6 @@ dbuser=${cmdline_username:-${database_username:-prophet}}
 dbname=${cmdline_database:-${database_name:-prophet}}
 echo
 echo "psql -U ${dbuser} -h ${dbhost} -d ${dbname} $extra_args"
-psql -U ${dbuser} -h ${dbhost} -d ${dbname} $extra_args
+
+[ ! $no_op ] && psql -U ${dbuser} -h ${dbhost} -d ${dbname} $extra_args
 

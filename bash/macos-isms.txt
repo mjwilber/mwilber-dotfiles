@@ -1,0 +1,2 @@
+# Flush DNS
+# sudo killall -HUP mDNSResponder

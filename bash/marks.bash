@@ -96,10 +96,10 @@ function marks_old {
 # To add tab completion
 _completemarks() {
   local curw=${COMP_WORDS[COMP_CWORD]}
-  local wordlist=$(find $MARKPATH -maxdepth 1 -type l -printf "%f\n")
+  local wordlist=$(find $MARKPATH -maxdepth 1 -type l -exec basename {} \; )
   #Lookup project specific marks
   if [ -d "$MARKPATH/${PRJ:NONE}-${PBRANCH:NONE}" ]; then
-      local pwordlist=$(find $MARKPATH/${PRJ:NONE}-${PBRANCH:NONE} -maxdepth 1 -type l -printf "%f\n")
+      local pwordlist=$(find $MARKPATH/${PRJ:NONE}-${PBRANCH:NONE} -maxdepth 1 -type l -exec basename {} \; )
       wordlist=("${wordlist[@]}" "${pwordlist[@]}")
   fi
   COMPREPLY=($(compgen -W '${wordlist[@]}' -- "$curw"))
