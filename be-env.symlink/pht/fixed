@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 if [ -z $PRJ_HOME ] || [ ! -d $PRJ_HOME ]; then
   echo "No or invalid project environment is set: PRJ_HOME";

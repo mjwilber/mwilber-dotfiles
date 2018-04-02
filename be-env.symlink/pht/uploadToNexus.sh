@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # <base_url>/<repository>/<group>/<component>/<version>/
 repo_base_url="http://repo.bybaxter.com:8081/repository/%s/%s/%s/%s/"

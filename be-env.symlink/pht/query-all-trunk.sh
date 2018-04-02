@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # usage: query-all[-test].sh username query | psql [dbname]
 
 #  Make sure you end your query with a semicolon, otherwise it blows up. psql needs to be 

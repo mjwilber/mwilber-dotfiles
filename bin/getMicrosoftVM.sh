@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 baseurl=https://az412801.vo.msecnd.net/vhd/IEKitV1_Final/VirtualBox/Linux
 ie6_xp=$baseurl/IE6_XP/IE6.WinXP.For.LinuxVirtualBox.sfx

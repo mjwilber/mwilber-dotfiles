@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Renames specifiex file(s) by using exif data (via exiv2).
 # to $year/$month/$year-$month-$day/Wilber_$year$month$day_$imageNumber.$ext

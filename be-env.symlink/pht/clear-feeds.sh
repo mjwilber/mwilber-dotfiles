@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 pushd ${FEED_HOME:-${PRJ_HOME}/var/feeds}
 

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # We need to do it this way, because the .gradle directory is used to hold a whole mess
 # of cached items (mostly from library repos).
 

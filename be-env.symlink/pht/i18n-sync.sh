@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 usage() {
     [ $# -gt 0 ] && echo && echo "ERROR: $@" && echo

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # A script to call ..../prophet-sql-dump by crontab to dump dev-trunk-goldendb in the early mornings.
 # dbs_to_dump="dev-tomcat-goldendb:prophet_bps"
 # dbs_to_dump="dev-trunk-goldendb dev-trunk-tomcatdb"

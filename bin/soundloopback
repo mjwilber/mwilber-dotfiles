@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 case "x$1" in 
   xon | xstart )
     pactl load-module module-loopback latency_msec=1

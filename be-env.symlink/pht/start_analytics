@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # export PROPHET_ANALYTICS_SERVER_OPTS=-agentlib:jdwp=transport=dt_socket,address=localhost:5005,server=y,suspend=y
 
