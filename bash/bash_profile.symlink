@@ -8,5 +8,8 @@ fi
 
 # User specific environment and startup programs
 
-PATH=$PATH:$HOME/bin
+if [ -d "$HOME/bin" ]; then
+    PATH=$PATH:$HOME/bin
+fi
 export PATH
+

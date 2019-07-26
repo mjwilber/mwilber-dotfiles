@@ -1,0 +1,95 @@
+#!/bin/bash
+###############################################################################
+## make4gl
+## Copyright 2009 - Baxter Planning Systems, Inc. All rights reserved
+###############################################################################
+
+self=$(basename $0)
+baseDir=
+prog=
+cleanRun="Y"
+
+usage()
+{
+   echo
+   echo "Compiles all the 4GL code under the base directory specified"
+   echo "Usage: $self [-n] <directory>"
+   echo
+   echo "  -n - No error on empty direcory"
+   echo
+   echo "You should redirect the output of this script to a file to make error review easier"
+   echo    
+   exit 1
+}
+
+noErrorOnEmpty=
+while getopts ":n" opt; do
+   case $opt in
+   n)  noErrorOnEmpty=TRUE
+       ;;
+   *)  usage
+       ;;
+   esac
+done
+shift $(expr $OPTIND - 1)
+
+if [ $# -ne 1 ]; then
+   usage
+fi
+
+baseDir=$1
+   
+echo "#######################################################" 
+echo "#  make4GL report - $baseDir"
+echo "#  $(hostname)   $(date)"
+echo "#######################################################" 
+echo
+echo "Starting..."
+echo
+echo
+echo "#######################################################" 
+for prog in $(find $baseDir | grep '\.4gm$'); do
+   echo cd $prog
+   pushd $prog
+   # Only try to compile programs if there's a makefile
+   if [ -s makefile ]; then
+      rm *.err > /dev/null 2>&1
+      make 
+      if [ $? -ne 0 ]; then
+         cleanRun="N"
+      fi
+   else
+      echo
+      echo "SKIPPING: No makefile"
+      ls -l *
+   fi
+   echo
+   echo
+   popd
+   echo "#######################################################" 
+done
+echo
+echo
+if [ ! $prog ]; then
+   # Check to see if an error should be returned
+   if [ "$noErrorOnEmpty" == "TRUE" ]; then
+      # Indicate nothing was done, but consider this a good run
+      cleanRun="Y"
+   else
+      cleanRun="N"
+   fi
+   echo "No 4gm directories found in $baseDir" 1>&2
+   echo
+fi
+if [ $cleanRun = "Y" ]; then
+   echo "Completed Successfully" 1>&2 
+   returnCode=0
+else
+   echo "*** Completed with Errors ***" 1>&2
+   returnCode=1
+fi
+echo
+echo "#######################################################" 
+echo "#  $(date)"
+echo "#######################################################" 
+exit $returnCode

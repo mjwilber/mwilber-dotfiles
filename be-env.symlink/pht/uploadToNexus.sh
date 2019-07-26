@@ -37,7 +37,7 @@ u() {
     local component=$2
     local url=$3
     echo curl -v -u admin:admin123 --upload-file ${f} $url
-#    curl -v -u admin:admin123 --upload-file ${f} $url 2>&1 >> ${component}-$(date +%Y%m%d-%H%M%S)-upload.log
+    curl -v -u admin:admin123 --upload-file ${f} $url 2>&1 >> ${component}-$(date +%Y%m%d-%H%M%S)-upload.log
     [ $? -eq 0 ] && echo "Uploaded ${f} SUCCESSFUL" || echo "Failed uploading ${f}"
 }
 
@@ -50,14 +50,22 @@ for f in $*; do
     if [ -e "${f}.md5" ]; then
         echo "Skip generating md5 checksum as the file exists"
     else
-        md5sum $f | awk '{print $1}' > ${f}.md5
-        echo "Skip generating md5 checksum as the file exists"
+        echo "Generating md5 checksum for ${f}"
+        if [ $(uname) == 'Darwin' ]; then
+          md5 -q ${f} | tee ${f}.md5
+        else
+          md5sum $f | awk '{print $1}' > ${f}.md5
+        fi
     fi
     if [ -e "${f}.sha1" ]; then
         echo "Skip generating sha1 checksum as the file exists"
     else
-        sha1sum $f | awk '{print $1}' > ${f}.sha1
-        echo "Skip generating sha1 checksum as the file exists"
+        echo "Generating md5 checksum for ${f}"
+        if [ $(uname) == 'Darwin' ]; then
+          shasum $f | tee ${f}.sha1
+        else
+          sha1sum $f | awk '{print $1}' > ${f}.sha1
+        fi
     fi
 
     

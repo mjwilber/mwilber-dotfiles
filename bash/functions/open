@@ -1,9 +1,13 @@
 
 function o() {
-    local toOpen="$@"
-	if [ $# -eq 0 ]; then
-		toOpen=.
-	fi;
+  local toOpen="$@"
+  if [ $# -eq 0 ]; then
+	toOpen=.
+  fi
 
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    open "$toOpen"
+  else
     xdg-open "$toOpen"
+  fi
 }

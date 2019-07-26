@@ -40,7 +40,6 @@ if [ -e "$PRJ_HOME/user.properties" ]; then
 fi
 
 use jdk 8
-use ant prophet_proj
 
 mark -p phome $PRJ_HOME
 mark -p pweb $PRJ_HOME/deploy/prophet.ear/web.war/prophet

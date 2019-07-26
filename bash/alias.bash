@@ -3,7 +3,11 @@
 for func_source in $BASH_CONFIG/functions/*; do  source $func_source; done
 
 alias start-ssh-agent='eval "$(ssh-agent -s)"'
-alias ssh-add-baxter='ssh-add ~/.ssh/bybaxter/id_rsa'
+alias ssh-add-baxter='ssh-add ~/.ssh/baxterplanning/id_rsa'
+
+# See http://marklodato.github.io/2013/10/31/autostart-tmux-on-ssh.html
+# SSH to $1 and then attach to tmux if it exists or start it
+alias tmux-on="ssh $1 -t -- /bin/sh -c 'tmux has-session && exec tmux attach || exec tmux"
 
 #SVN I use a wrapper for it to do some nice terminal and formatting items
 alias svn=svn-wrap.sh

@@ -3,18 +3,79 @@
 DOTFILES=$HOME/.dotfiles
 
 echo "creating symlinks"
-linkables=$( find -H "$DOTFILES" -maxdepth 3 -name '*.symlink' )
-for file in $linkables ; do
-    target="$HOME/.$( basename $file ".symlink" )"
-    echo -n "  creating symlink for $file"
-    if [ -L "$target" ]; then
-      echo " -- link exists"
-    elif [ -e "$target" ]; then
-      echo " -- OVERRIDDEN"
-    else
-      # $file is already absolute no need to specify DOTFILES again
-      # ln -s $DOTFILES/$file $target
-      ln -s $file $target
-      echo " -- CREATED"
+
+link_file () {
+  local src=$1 dst=$2
+
+  local overwrite= backup= skip=
+  local action=
+
+  if [ -f "$dst" -o -d "$dst" -o -L "$dst" ]; then
+    if [ "$overwrite_all" == "false" ] && [ "$backup_all" == "false" ] && [ "$skip_all" == "false" ]; then
+      local currentSrc="$(readlink $dst)"
+
+      if [ "$currentSrc" == "$src" ]; then
+        skip=true;
+      else
+        echo "File already exists: $dst ($(basename "$src")), what do you want to do?"
+        echo "[s]kip, [S]kip all, [o]verwrite, [O]verwrite all, [b]ackup, [B]ackup all?"
+        read -n 1 action
+
+        case "$action" in
+          o )
+            overwrite=true;;
+          O )
+            overwrite_all=true;;
+          b )
+            backup=true;;
+          B )
+            backup_all=true;;
+          s )
+            skip=true;;
+          S )
+            skip_all=true;;
+          * )
+            ;;
+        esac
+      fi
     fi
-done
+
+    overwrite=${overwrite:-$overwrite_all}
+    backup=${backup:-$backup_all}
+    skip=${skip:-$skip_all}
+
+    if [ "$overwrite" == "true" ]; then
+      rm -rf "$dst"
+      echo "removed $dst"
+    fi
+
+    if [ "$backup" == "true" ]; then
+      mv "$dst" "${dst}.backup"
+      echo "moved $dst to ${dst}.backup"
+    fi
+
+    if [ "$skip" == "true" ]; then
+      echo "skipped $src"
+    fi
+  fi
+
+  if [ "$skip" != "true" ]; then  # "false" or empty
+    ln -s "$1" "$2"
+    echo "linked $1 to $2"
+  fi
+}
+
+    
+#Alternate means to install
+install_dotfiles() {
+  echo "installing symlinks"
+
+  local overwrite_all=false backup_all=false skip_all_false
+
+  for src in $( find -H "$DOTFILES" -maxdepth 3 -name '*.symlink'); do
+    dst="$HOME/.$(basename "${src%.*}")"
+    link_file "$src" "$dst"
+  done
+}
+
+install_dotfiles
