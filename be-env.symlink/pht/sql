@@ -12,6 +12,7 @@ Usage: ${self} [-G <gcid>] [-v]
     -G <gcid> = Use the gcid to lookup tenant specific properties
     -T        = Use the test database instead (Not Implemented Yet)
     -v        = Verbose - print debug info
+    -h/d/U <v>= These override any of the properties, but are treated as their psql equivalents
     -n        = No-op, print psql command but do not execute (debug, list environment"
 EOF
 }
@@ -46,18 +47,21 @@ function loaddbprops() {
     # Files relative to $PRJ_HOME
     local pfiles=(
                    "${PRJ_HOME}/etc/prophet.properties"
-                   "${PRJ_HOME}/etc/prophet/$USER.properties"
-                   "${PRJ_HOME}/etc/prophet/$(hostname).properties"
+                   "${PRJ_HOME}/etc-template/prophet/$USER.properties"
+                   "${PRJ_HOME}/etc-template/prophet/$(hostname).properties"
                    "${PRJ_HOME}/etc/tenants/${tenant}.tenant.properties"
                    "${CONFIG_DIR_HOST:-/nowhere}/$(hostname).properties"
                     # "${PRJ_HOME}/etc-template/prophet/$USER.properties"
                     # "${PRJ_HOME}/etc-template/prophet/$(hostname).properties"
                   )
     for pf in "${pfiles[@]}"; do
-        echo "$pf"
+        # echo "$pf"
         if [ -e "$pf" ]; then
             echo "# Read from: $pf" >> $tmpSrcfile
-            grep -e "^database" "$pf" | sed 's/^/export /' | sed 's/\./_/g' >> $tmpSrcfile
+            grep -e "^database" "$pf" | \
+                grep -v "reports" | \
+                grep -E "(name|username|host)" | \
+                sed 's/^database\./export database_/' >> $tmpSrcfile
         # else
         #     echo "Not Found: $f"
         fi

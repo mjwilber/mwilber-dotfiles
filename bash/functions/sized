@@ -1,0 +1,5 @@
+
+
+function sized() {
+  du -sh ${@:-*} | sort -rh
+}

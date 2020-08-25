@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+help=0
+[[ "$1" == "-h" ]] && help=1 && shift;
+[[ "$1" == "-?" ]] && help=1 && shift;
+
+
+echo "bin/setup_prophet \\"
+echo "  && ./gradlew -PjooqRecreateDB=false -PdbRecreateAndPatchTest=false $* build deploy"
+
+if [[ $help -eq 0 ]]; then
+  echo "Logging bin/setup_prophet to logs/setup_prophet_$(date +%F).log"
+
+  bin/setup_prophet >> logs/setup_prophet_$(date +%F).log && \
+      ./gradlew -PjooqRecreateDB=false -PdbRecreateAndPatchTest=false ${*} build deploy
+fi

@@ -106,3 +106,4 @@ alias g="git"
 
 # Network
 alias ports='netstat -tulanp'
+alias weather='curl wttr.in'

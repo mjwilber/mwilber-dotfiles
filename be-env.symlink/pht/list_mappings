@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+usage()
+{
+  echo
+  echo "Usage: $(basename \"$0\") <logFile>"
+  echo
+  echo "Find mappings from a server.log file from Prophet"
+  echo "Pipe to find what you're looking for"
+  echo
+}
+
+while getopts ':h:' option; do
+  case "$option" in
+    h)  usage
+        exit
+        ;;
+    \?) printf "illegal option: -%s\n" "$OPTARG" >&2
+        usage
+        exit 1
+        ;;
+  esac
+done
+shift $((OPTIND - 1))
+
+if [[ $# -lt 1 ]]; then
+  echo "Missing <logFile>" >&2
+  usage
+  exit 1
+fi
+
+grep RequestMappingHandlerMapping "$1" | cut -c 68- | sort |  uniq

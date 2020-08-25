@@ -1,0 +1,119 @@
+#!/usr/bin/env bash
+###############################################################################
+##
+##  FILE:  setdb
+##
+##  NOTES: This script is used to set the environment to use the desired
+##         PostgreSQL database when running commands from a shell
+##
+##         It MUST be sourced or it will be unable to set PGDATABASE properly
+##
+##  Copyright 2017 - Baxter Planning Systems, Inc. All rights reserved
+##
+###############################################################################
+
+# Abort if the script is called directly
+if [ "$(basename -- "$0")" == "setdb" ]; then
+   echo "ERROR: The setdb script is intended to be sourced and not run directly"
+   exit 1
+fi
+
+###############################################################################
+# Usage
+###############################################################################
+setdb_usage()
+{
+   echo "Usage: $self"
+}
+###############################################################################
+# Check parameters
+###############################################################################
+
+# Parse runstring options.
+# There should be N remaining arg(s).
+if [ $# -ne 0 ]; then
+   setdb_usage
+   unset -f setdb_usage
+fi
+
+###############################################################################
+# Run everything in a function to enable local variables
+###############################################################################
+
+setdb_main()
+{
+
+   ############################################################################
+   # Define script variables
+   ############################################################################
+
+   local db_list
+   local x
+   local min
+   local db
+   local company_array
+   local db_array
+   local max
+   local val
+   local -u global_cid
+
+   db_list=$(psql -Atc "SELECT datname FROM pg_database WHERE datistemplate = false AND datname LIKE E'prophet\_%' AND datname <> 'prophet_authentication' ORDER BY 1;" postgres)
+
+   let x=0
+   min=1
+   for db in $db_list; do
+      let x=x+1
+      global_cid=${db#*_}
+      company_info=$(psql -Atc "SELECT RPAD(global_cid, 4) || ' - ' || LPAD(cid::TEXT, 3) || ' - ' || company_name FROM sys_co_prefs WHERE global_cid = '$global_cid'" $db)
+      company_info=${company_info:-$(printf '%-4s%s' "$global_cid" " - N/A - Undefined")}
+      company_array[$x]=$company_info
+      db_array[$x]=$db 
+   done
+   max=$x
+
+   ############################################################################
+   # Start script
+   ############################################################################
+
+   declare -i val
+   declare -l ans
+   while true; do
+      unset val
+      clear
+      echo
+      echo "Currently selected database: $PGDATABASE"
+      echo
+      echo "Select a new database:"
+      for x in ${!company_array[@]}; do
+         echo "  $x.   ${company_array[$x]}"
+      done
+      echo -n "Enter your selection ($min - $max, 'q' to abort): "
+      read ans
+      if [ "$ans" == "q" ]; then
+         break
+      fi
+      val=$ans
+      if [ $val -ge $min -o $val -le $max ]; then
+         break
+      fi
+   done
+
+   if [ "$val" ]; then
+      echo
+      export PGDATABASE=${db_array[$val]}
+      export PG_DBPATH=$PGDATABASE
+      echo "New database: $PGDATABASE"
+      echo
+   else
+      echo
+      echo "Aborting"
+      echo
+   fi
+}
+
+# Call the function to do the work
+setdb_main
+
+# Delete the function to keep the environment clean
+unset -f setdb_main
+
