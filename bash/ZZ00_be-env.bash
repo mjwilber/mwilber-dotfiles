@@ -50,4 +50,4 @@ source "$PRJ_ENV" "${PRBRANCH:-develop}"
 PRJ_ENV_HOME=$(dirname $PRJ_ENV)
 [ -d $PRJ_ENV_HOME ] && [[ ":$PATH:" != *":$PRJ_ENV_HOME:"* ]] && export PATH="$PRJ_ENV_HOME:$PATH"
 
-# [[ -n "$LP_OS" ]] && type -t prompt_tag && prompt_tag $PRJ
+[[ -n "${PRJ}" ]] && [[ -n "$LP_OS" ]] && [[ $(type -t prompt_tag) == "function" ]] && prompt_tag "${LP_BRACKET_OPEN}${PRJ}:${PRBRANCH:-develop}${LP_BRACKET_CLOSE}"
