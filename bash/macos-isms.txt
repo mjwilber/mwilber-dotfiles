@@ -1,2 +1,20 @@
 # Flush DNS
 # sudo killall -HUP mDNSResponder
+
+
+# Show the path on the bottom
+defaults write com.apple.finder ShowPathbar -bool true
+
+# Add status bar in Finder window
+defaults write com.apple.finder ShowStatusBar -bool true
+
+# Change location of screenshots:
+defaults write com.apple.screencapture location /Users/[your_username]/Screenshots
+
+
+# Change the keystroke speed
+# https://superuser.com/questions/677665/increase-the-speed-at-which-the-delete-key-deletes-things-on-osx
+# http://continentalroast.blogspot.com/2011/08/macos-fast-key-repeat.html
+defaults write NSGlobalDomain KeyRepeat -int 0
+defaults write NSGlobalDomain InitialKeyRepeat -int 15
+

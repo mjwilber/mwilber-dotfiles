@@ -1,0 +1,3 @@
+echo "(dell.use) $*"
+
+alias sql-dell-dev="sql -h dev-dell-utf8db.baxterplanning.com -d prophet_dell"

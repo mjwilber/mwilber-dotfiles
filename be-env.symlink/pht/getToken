@@ -1,0 +1,15 @@
+
+
+curl -v \
+    --request POST \
+    --url 'https://baxterplanning-staging.auth0.com/oauth/token' \
+    --header 'content-type: application/x-www-form-urlencoded' \
+    --data '{\
+        "grant_type":"password_realm", \
+        "username": "matt.wilber@gmail.com", \
+        "password": "", \
+        "realm": "ProphetUsers", \
+        "audience": "https://prophet-api.baxterplanning.com", \
+        "client_id": "", \
+        "client_secret": "" \
+        }'

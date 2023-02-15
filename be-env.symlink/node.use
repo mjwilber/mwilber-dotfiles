@@ -1,0 +1,28 @@
+# echo -n "(node.use) $* => "
+echo -n "(node.use) $* => "
+
+DEFAULT_VERSION=16
+
+for possibleVer in $@ $DEFAULT_VERSION; do
+  #debug echo "Checking: $possibleVer"
+  case "$possibleVer" in
+    local)
+      if [ $(find . -name nodejs -print -quit) ]; then
+        #debug echo "Found local nodejs";
+        tmp_var=$(pwd)/$(find $(find . -name nodejs) -name bin -print -quit)
+      fi
+      break;;
+
+    12 | *)
+      tmp_var="/usr/local/opt/node@12/bin"
+      break;;
+
+    16 | *)
+      tmp_var="/usr/local/opt/node@16/bin"
+      break;;
+  esac
+done
+
+echo "$tmp_var"
+export PATH=$tmp_var:$PATH;
+unset tmp_var

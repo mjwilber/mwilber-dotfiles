@@ -21,6 +21,10 @@ git config --global alias.it '!git init && git commit -m “root” --allow-empt
 # git config --global alias.staash 'stash --include-untracked'
 # git config --global alias.staaash 'stash --all'
 git config --global alias.grog 'log --graph --abbrev-commit --decorate --all --format=format:"%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(dim white) - %an%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n %C(white)%s%C(reset)"'
+git config --global alias.all 'fetch --all --prune'
+git config --global alias.fall 'fetch --all --prune'
+
+git config --global alias.recent "for-each-ref --sort=-committerdate refs/heads/ --format='%(HEAD) %(color:red)%(objectname:short)%(color:reset) %(color:yellow)%(refname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'"
 
 # Other suggestions
 # ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat

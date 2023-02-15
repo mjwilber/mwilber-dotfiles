@@ -5,6 +5,11 @@ help=0
 [[ "$1" == "-?" ]] && help=1 && shift;
 
 
+red="\033[0;31m"
+off="\033[0m"
+
+[[ "$PWD" != "$PRJ_HOME" ]] && echo -e "\n${red}WARN: Not executing from current project home: $PRJ_HOME${off}\n"
+
 echo "bin/setup_prophet \\"
 echo "  && ./gradlew -PjooqRecreateDB=false -PdbRecreateAndPatchTest=false $* build deploy"
 

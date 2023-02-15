@@ -39,7 +39,9 @@ if [ -e "$PRJ_HOME/user.properties" ]; then
 	echo 
 fi
 
-use jdk 8
+use skyforge
+# use jdk 8
+jabba use system@1.8.126
 
 mark -p phome $PRJ_HOME
 mark -p pweb $PRJ_HOME/deploy/prophet.ear/web.war/prophet

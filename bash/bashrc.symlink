@@ -26,3 +26,5 @@ if [ -n "$PS1" ]; then # Run the rest only for interactive shells
     # Allow for local shell modifications
     [ -e ~/.bashrc.local ] && source ~/.bashrc.local
 fi
+
+[ -s "/Users/mwilber/.jabba/jabba.sh" ] && source "/Users/mwilber/.jabba/jabba.sh"

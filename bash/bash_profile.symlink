@@ -13,3 +13,4 @@ if [ -d "$HOME/bin" ]; then
 fi
 export PATH
 
+[ -s "/Users/mwilber/.jabba/jabba.sh" ] && source "/Users/mwilber/.jabba/jabba.sh"

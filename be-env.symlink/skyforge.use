@@ -1,0 +1,3 @@
+echo "(skyforge.use) $*"
+
+alias sfec2='ssh -i ~/.ssh/ec2-baxter-test.pem -l ansible'
