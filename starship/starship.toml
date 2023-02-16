@@ -1,0 +1,27 @@
+
+
+command_timeout=2000
+
+format = "${custom.prj}${custom.subprj}${all}"
+
+[directory]
+truncation_length = 5
+
+[aws]
+disabled = true
+
+[time]
+disabled = false
+use_12hr = true
+# format = '🕙 [\[$time\] ]($style) '
+format = '[\[$time\]]($style) '
+
+[java]
+style = "red"
+
+[custom.prj]
+command = """ [ -n "${PBRANCH}" ] && echo "[${PRJ}:${PBRANCH}]" || echo "[${PRJ}]" """
+# command = """ echo $PRJ """
+when = """ test -n "${PRJ}" """
+style = "bold italic fg:purple"
+format = "[$output ]($style)"
